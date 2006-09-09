@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+open DATEI, $ARGV[0];
+
+%filter;
+
+while (<DATEI>) {
+  /\[\[([^\]]*)\]\]/;
+  $lemma = $1;
+  $lemma =~ tr/_/ /;
+  $filter{$1} = $_;
+}
+
+
+while (<STDIN>) {
+  /\[\[([^\]]*)\]\]/;
+  $lemma = $1;
+  $lemma =~ tr/_/ /;
+  if (defined $filter{$1}) {
+    delete $filter{$1};
+  } else {
+#    print $_;
+  }
+}
+
+print sort values %filter;
