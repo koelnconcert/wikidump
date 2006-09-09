@@ -1,14 +1,37 @@
 #!/usr/bin/perl
 use strict;
-
+use Getopt::Std;
+use Pod::Usage;
 use XML::Parser;
 
-$SIG{INT} = "sig_int";
-my $show_context = 30;
-my $show_contextlines = 0;
+getopts("hc:l:i:", \my %opts);
+
+pod2usage(-verbose => 1) if $opts{h};
+pod2usage unless @ARGV;
+
+my $show_context = $opts{c} || 30;
+my $show_contextlines = $opts{l} || 0;
+my $show_info = $opts{i} || 0;
 my $count = 0;
-my $filename = $ARGV[0];
+my $modstr = $ARGV[0];
+my $mod;
+my $fileext;
+if ($modstr eq "dk") {
+  $mod = \&mod_datumsformat;
+} else {
+  pod2usage("no module selected");
+}
+
+#mod_selbstlinks($p, $title, $text);
+#mod_plusdagger($p, $title, $text);
+
+my $filename = $ARGV[1];
 my $filesize = -s $filename;
+
+my %found;
+my %context;
+my %info;
+
 my $p = new XML::Parser();
 $p->setHandlers(
   Start => \&handle_start,
@@ -16,12 +39,6 @@ $p->setHandlers(
   Char  => \&handle_text,
 );
 $p->parsefile($filename);
-
-my %found;
-my %context;
-my %info;
-
-output();
 
 
 ###########################################
@@ -31,9 +48,7 @@ sub main {
   my($p, $title, $text) = @_;
   $text =~ s/\n//gm;
 
-  #mod_selbstlinks($p, $title, $text);
-  mod_datumsformat($p, $title, $text);
-  #mod_plusdagger($p, $title, $text);
+  &$mod($p, $title, $text);
   
   if ($count % 1000 == 0) {
     printf STDERR "%2.2f\%\n", $p->current_byte/$filesize*100;
@@ -44,6 +59,10 @@ sub main {
     output_one($title);
   }
 }
+
+###########################################
+# Modules
+###########################################
 
 ###########################################
 sub mod_selbstlinks {
@@ -102,24 +121,20 @@ sub mod_plusdagger {
 }
 
 ###########################################
+# Allgemeine Routinen
+###########################################
+
+###########################################
 sub insert_found {
 ###########################################
   my($title, $before, $match, $after) = @_;
   $found{$title}++;
   $context{$title} .= substr($before,length($before)-$show_context,$show_context)
         	      .$match.substr($after,0,$show_context)."\n";
-  if ($found{$title} <= 5) {
+  if ($found{$title} <= $show_info || $show_info == -1) {
     $info{$title} .= ", $match";
-  } elsif ($found{$title} == 6) {
+  } elsif ($found{$title} == $show_info + 1 && $show_info != 0) {
     $info{$title} .= ", ...";
-  }
-}
-
-###########################################
-sub output {
-###########################################
-  foreach my $title (sort keys %found){
-#    output_one($title);
   }
 }
 
@@ -133,26 +148,18 @@ sub output_one {
   if ($info{$title}) {
     print $info{$title};
   }
-  if ($found > 5) {
+  if ($found > $show_info) {
     print " ($found)";
   }
   print "\n";
   $| = 1;
   my $i = 0;
   foreach my $line (split /\n/, $context) {
-    if ($i++ < $show_contextlines) { 
+    if ($i++ < $show_contextlines || $show_contextlines == -1) { 
       print "<nowiki>$line</nowiki><br/>\n"; 
     }
   }
 }
-
-###########################################
-sub sig_int {
-###########################################
-  output;
-  exit;
-}
-
 
 ###########################################
 # Handler
@@ -192,3 +199,25 @@ sub handle_text {
     $text .= $cdata;
   }
 }
+
+
+__END__
+
+=head1 NAME
+
+wikidump-parser - Parse wikipedias xml-dump
+
+=head1 SYNOPSIS
+
+wikidump-parser [-h] [-i <#>] [-l <#>] [-c <#>] <mod> <xml-dump-file>
+
+=head1 ARGUMENTS
+
+  dk     # Datumskonvention (1.1.2000)
+
+=head1 OPTIONS
+
+  -i <#> # num. of occurences to be shown (0), -1=infty
+  -l <#> # num. of context-lines to be shown (0), -1=infty;
+  -l <#> # num. of context-chars to be shown before/after occurence (30)
+  -h     # show help
