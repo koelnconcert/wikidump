@@ -9,6 +9,8 @@ getopts("hc:l:i:", \my %opts);
 pod2usage(-verbose => 1) if $opts{h};
 pod2usage unless @ARGV;
 
+binmode(STDOUT, ":utf8");
+
 my $show_context = $opts{c} || 30;
 my $show_contextlines = $opts{l} || 0;
 my $show_info = $opts{i} || 0;
