@@ -86,7 +86,7 @@ sub mod_datumsformat {
   $_ = $text;
 
   s/== *(Literatur|Weblinks?|Quellen?|Bibliographie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
-  s/\{\{Chartplatzierungen\}\}(.*?)<\/div>//sg; # chartboxen
+  s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
 
   while (/(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)/) {
     if ($' !~ /^\.?\d/ and   # nur drei Zahlengruppen
