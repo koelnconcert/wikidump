@@ -6,7 +6,7 @@ binmode(STDERR, ":utf8");
 binmode(STDOUT, ":utf8");
 binmode(STDIN, ":utf8");
 
-@input = <>;
+@input = <STDIN>;
 @sort = sort @input;
 
 @abc = qw/A B C D E F G H I J K L M N O P Q R S T U V W X Y Z/;
