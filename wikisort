@@ -1,0 +1,29 @@
+#!/usr/bin/perl
+
+use locale;
+
+binmode(STDERR, ":utf8");
+binmode(STDOUT, ":utf8");
+binmode(STDIN, ":utf8");
+
+@input = <>;
+@sort = sort @input;
+
+@abc = qw/A B C D E F G H I J K L M N O P Q R S T U V W X Y Z/;
+$buchstabe = shift @abc;
+print "===<A===\n\n";
+  
+while($entry = shift @sort) {
+  $entry =~ /^.*?\[\[(.*?)\]\]/;
+  $name = $1;
+  while ($buchstabe && $name ge $buchstabe) {
+    print "\n===$buchstabe===\n\n";
+    $buchstabe = shift @abc;
+  }
+  print $entry;
+}
+
+while ($buchstabe = shift @abc) {
+  print "\n===$buchstabe===\n\n";
+}
+
