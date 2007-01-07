@@ -11,19 +11,19 @@ binmode(STDIN, ":utf8");
 
 @abc = qw/A B C D E F G H I J K L M N O P Q R S T U V W X Y Z/;
 $buchstabe = shift @abc;
-print "===<A===\n\n";
+print "===<A===\n";
   
 while($entry = shift @sort) {
   $entry =~ /^.*?\[\[(.*?)\]\]/;
   $name = $1;
   while ($buchstabe && $name ge $buchstabe) {
-    print "\n===$buchstabe===\n\n";
+    print "\n===$buchstabe===\n";
     $buchstabe = shift @abc;
   }
   print $entry;
 }
 
 while ($buchstabe = shift @abc) {
-  print "\n===$buchstabe===\n\n";
+  print "\n===$buchstabe===\n";
 }
 
