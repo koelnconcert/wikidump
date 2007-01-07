@@ -99,7 +99,7 @@ sub mod_datumsformat {
   my($p, $title, $text) = @_;
   $_ = $text;
 
-  s/== *(Literatur|Weblinks?|Quellen?|Bibliographie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
+  s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
 
   while (/(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)/) {
