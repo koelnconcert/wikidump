@@ -20,6 +20,8 @@ my $mod;
 my $fileext;
 if ($modstr eq "dk") {
   $mod = \&mod_datumsformat;
+} elsif ($modstr eq "sl" ) {
+  $mod = \&mod_selbstlinks;
 } elsif ($modstr eq "grep" ) {
   shift(@ARGV);
   $mod = \&mod_simpleregexp;
@@ -230,6 +232,7 @@ wikidump-parser [-h] [-i <#>] [-l <#>] [-c <#>] <mod> <xml-dump-file>
 =head1 ARGUMENTS
 
   dk     # Datumskonvention (1.1.2000)
+  sl     # Selbstlinks
   grep <regexp>
          # use the userspecitifed regexp for grep
 
