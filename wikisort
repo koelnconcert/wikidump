@@ -11,7 +11,7 @@ binmode(STDIN, ":utf8");
 
 @abc = qw/A B C D E F G H I J K L M N O P Q R S T U V W X Y Z/;
 $buchstabe = shift @abc;
-print "===<A===\n";
+print "===0-9===\n";
   
 while($entry = shift @sort) {
   $entry =~ /^.*?\[\[(.*?)\]\]/;
