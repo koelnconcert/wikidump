@@ -33,7 +33,6 @@ if ($modstr eq "dk") {
 #mod_plusdagger($p, $title, $text);
 
 my $filename = $ARGV[1];
-my $filesize = -s $filename;
 
 my %found;
 my %context;
@@ -54,7 +53,7 @@ while(defined($page = $parser->next)) {
   &$mod($page);
   
   if ($count % 1000 == 0) {
-    printf STDERR "%2.2f\%\n", $parser->current_byte/$filesize*100;
+    printf STDERR "%2.2f\%\n", $parser->current_byte/$parser->size*100;
   }
   if ($found{$title}){
     chomp $context{$title};
@@ -95,6 +94,8 @@ sub mod_selbstlinks {
 sub mod_datumsformat {
 ###########################################
   my($page) = @_;
+  return unless $page->namespace eq ''; # nur Artikel-Namensrausm
+  
   $_ = ${$page->text};
 
   s/\n//g;
