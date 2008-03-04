@@ -133,12 +133,10 @@ sub mod_datumsformat {
   
   $_ = ${$page->text};
 
-  s/\n//g;
-
   s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
 
-  while (/(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)/) {
+  while (/(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)/g) {
     if ($' !~ /^\.?\d/ and   # nur drei Zahlengruppen
         $` !~ /\d\.?$/ and  
 	$2 <= 12 and  # plausibles Datum 
@@ -146,18 +144,18 @@ sub mod_datumsformat {
 	$1 <= 31 and
 	$1 >= 1 and
 	$` !~ /http:\/\/\S*$/ and # link
-	$' !~ /^ *<!-- ?sic/ and
-        $' !~ /^ *\|/ and # parameter
-        $' !~ /^[^\[\]]*\][^\]]+/ and # vermutlich http-link
-	$' !~ /^[^<]*<\/(ref|small|gallery)>/ and # small- und ref-Tag
+	$' !~ /^\s*<!-- ?sic/ and #sic-Kommentar
+        $` !~ /[|=]\s*$/s and # parameter oder Tabelle
+        $' !~ /^\s*\|/s and # parameter oder Tabelle
+        $' !~ /^[^\[\]]*\][^\]]+/s and # vermutlich http-link
+	$' !~ /^[^<]*<\/(ref|small|gallery)>/s and # small- und ref-Tag
 	$' !~ /^[^<]*\/>/ and # für <ref name="....." />
-	$` !~ /<!--[^>]*$/ and # Kommentar
+	$` !~ /<!--[^>]*$/s and # Kommentar
         $` !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
         $` !~ /\[\[(Bild|Image):[^\]\|]*$/i # Bild-Wikilink
       ) {
       insert_found($page->title,$`,$&,$');
     }
-    $_ = $';
   }
 }
 
