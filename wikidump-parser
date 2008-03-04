@@ -2,7 +2,7 @@
 use strict;
 use Getopt::Std;
 use Pod::Usage;
-use XML::Parser;
+use Parse::MediaWikiDump;
 
 getopts("hc:l:i:", \my %opts);
 
@@ -39,13 +39,12 @@ my %found;
 my %context;
 my %info;
 
-my $p = new XML::Parser();
-$p->setHandlers(
-  Start => \&handle_start,
-  End   => \&handle_end,
-  Char  => \&handle_text,
-);
-$p->parsefile($filename);
+my $p = Parse::MediaWikiDump::Pages->new($filename);
+
+my $page;
+while(defined($page = $p->next)) {
+  main($p, $page->title, $page->text);
+}
 
 
 ###########################################
@@ -55,7 +54,7 @@ sub main {
   my($p, $title, $text) = @_;
   $text =~ s/\n//gm;
 
-  &$mod($p, $title, $text);
+  &$mod($p, $title, $$text);
   
   if ($count % 1000 == 0) {
     printf STDERR "%2.2f\%\n", $p->current_byte/$filesize*100;
@@ -100,6 +99,8 @@ sub mod_datumsformat {
 ###########################################
   my($p, $title, $text) = @_;
   $_ = $text;
+
+  s/\n//g;
 
   s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
@@ -178,46 +179,6 @@ sub output_one {
     }
   }
 }
-
-###########################################
-# Handler
-###########################################
-
-my $is_title;
-my $title;
-my $is_text;
-my $text;
-
-###########################################
-sub handle_start {
-###########################################
-  my($p, $tag, %attrs) = @_;
-  if ($tag eq 'title') { $is_title = 1; }
-  if ($tag eq 'text') { $is_text = 1; $text="";}
-}
-
-###########################################
-sub handle_end {
-###########################################
-  my($p, $tag) = @_;
-  if ($tag eq 'text') { $is_text = 0; }
-  if ($tag eq 'page' and $title !~ /:/) { 
-    main($p,$title,$text); 
-  }
-}
-
-##########################################
-sub handle_text {
-###########################################
-  my($p, $cdata) = @_;
-  if ($is_title) {
-    $title = $cdata;
-    $is_title = 0;
-  } elsif ($is_text) {
-    $text .= $cdata;
-  }
-}
-
 
 __END__
 
