@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 use locale;
+use POSIX qw(locale_h);
+setlocale(LC_ALL, "de_DE.utf8");
 
 binmode(STDERR, ":utf8");
 binmode(STDOUT, ":utf8");
