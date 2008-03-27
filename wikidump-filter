@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 open DATEI, $ARGV[0];
 
 binmode(STDERR, ":utf8");
@@ -11,19 +10,19 @@ binmode(DATEI, ":utf8");
 %filter;
 
 while (<DATEI>) {
-  /\[\[([^\]]*)\]\]/;
+  /^\* *\[\[(.*?)\]\]/;
   $lemma = $1;
   $lemma =~ tr/_/ /;
-  $filter{$1} = $_;
+  $filter{$lemma} = $_;
 }
 
 
 while (<STDIN>) {
-  /\[\[([^\]]*)\]\]/;
+  /^\* *\[\[(.*?)\]\]/;
   $lemma = $1;
   $lemma =~ tr/_/ /;
-  if (defined $filter{$1}) {
-    delete $filter{$1};
+  if (defined $filter{$lemma}) {
+    delete $filter{$lemma};
   } else {
     print $_;
   }
