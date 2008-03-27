@@ -136,6 +136,14 @@ sub mod_datumsformat {
   s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
 
+  # todo: 
+  # Zitat-Vorlagen
+  # "vermutlich http-link" überprüfen
+  # Chartplatzierungen sieht komisch aus
+  # Literatur/Weblinks/etc.-Abschnitte verbessern (auch "===")
+  # Kommentare über mehrere Zeilen werden nicht erkannt
+  # [[MaK V 100 PA]] Abbildungsname in Infobox
+
   while (/(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)/g) {
     if ($' !~ /^\.?\d/ and   # nur drei Zahlengruppen
         $` !~ /\d\.?$/ and  
