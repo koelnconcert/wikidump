@@ -141,7 +141,9 @@ sub mod_datumsformat {
   # "vermutlich http-link" überprüfen
   # Chartplatzierungen sieht komisch aus
   # Literatur/Weblinks/etc.-Abschnitte verbessern (auch "===")
+  #   z.B. [[Alfred Philippson]]
   # Kommentare über mehrere Zeilen werden nicht erkannt
+  # {{Großes Bild}} 
   # [[MaK V 100 PA]] Abbildungsname in Infobox
 
   while (/(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)/g) {
