@@ -135,6 +135,7 @@ sub mod_datumsformat {
 
   s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
+  s/^[\| ]*(Abbildung|Bild)\s*=.*$//img; # Bild-Parameter in Infoboxen
 
   # todo: 
   # Zitat-Vorlagen
@@ -144,7 +145,6 @@ sub mod_datumsformat {
   #   z.B. [[Alfred Philippson]]
   # Kommentare über mehrere Zeilen werden nicht erkannt
   # {{Großes Bild}} 
-  # [[MaK V 100 PA]] Abbildungsname in Infobox
 
   while (/(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)/g) {
     if ($' !~ /^\.?\d/ and   # nur drei Zahlengruppen
