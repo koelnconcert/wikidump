@@ -30,7 +30,7 @@ pod2usage("no module selected") if scalar @ARGV == 0;
 for (@ARGV) {
   my $mod = $modules{$_};
   pod2usage("module $_ is unkown") if not defined $mod;
-  push @mods, $mod;
+  push @mods, $_;
 }
 
 my $show_context = $opts{c} || 30;
@@ -38,9 +38,10 @@ my $show_contextlines = $opts{l} || 0;
 my $show_info = $opts{i} || 0;
 my $count = 0;
 
-my %found;
-my %context;
-my %info;
+#TODO: diese globalen Variablen entfernen
+my $found;
+my $context;
+my $info;
 
 my $parser= Parse::MediaWikiDump::Pages->new($filename);
 
@@ -59,13 +60,11 @@ while(defined($page = $parser->next)) {
   my $title = $page->title;
 
   foreach my $mod (@mods) {
+    ($found, $context, $info) = ();
 
-    $mod->{func}->($page);
+    $modules{$mod}->{func}->($page);
   
-    if ($found{$title}){
-      chomp $context{$title};
-      output_one($title);
-    }
+    output_one($mod, $title) if $found;
   }
   
   print_progress() if ($count % 1000 == 0);
@@ -98,9 +97,9 @@ sub print_progress {
 ###########################################
 sub print_stats {
 ###########################################
-  my $hits = scalar keys %found;
-  printf STDERR "hits %d/%d (%.2f%%)\n",
-    $hits, $count, 1.0 * $hits / $count * 100;
+#  my $hits = scalar keys %found;
+#  printf STDERR "hits %d/%d (%.2f%%)\n",
+#    $hits, $count, 1.0 * $hits / $count * 100;
 }
 
 ###########################################
@@ -195,25 +194,25 @@ sub mod_plusdagger {
 sub insert_found {
 ###########################################
   my($title, $before, $match, $after) = @_;
-  $found{$title}++;
-  $context{$title} .= substr($before,length($before)-$show_context,$show_context)
+  $found++;
+  $context .= substr($before,length($before)-$show_context,$show_context)
         	      .$match.substr($after,0,$show_context)."\n";
-  if ($found{$title} <= $show_info || $show_info == -1) {
-    $info{$title} .= ", $match";
-  } elsif ($found{$title} == $show_info + 1 && $show_info != 0) {
-    $info{$title} .= ", ...";
+  if ($found <= $show_info || $show_info == -1) {
+    $info .= ", $match";
+  } elsif ($found == $show_info + 1 && $show_info != 0) {
+    $info .= ", ...";
   }
 }
 
 ###########################################
 sub output_one {
 ###########################################
-  my ($title) = @_;
-  my $found = $found{$title};
-  my $context = $context{$title};
+  my ($mod, $title) = @_;
+  chomp $context;
+  print "$mod: ";
   print "*[[$title]]";
-  if ($info{$title}) {
-    print $info{$title};
+  if ($info) {
+    print $info;
   }
   if ($found > $show_info) {
     print " ($found)";
