@@ -9,11 +9,13 @@ binmode(STDOUT, ":utf8");
 my %modules = ( 
   dk => { 
     name => "Datumskonventionen", 
-    func => \&mod_datumsformat
+    func => \&mod_datumsformat,
+    show_info => 5
   },
   'grep' => {
     name => "Grep",
-    func => \&mod_simpleregexp
+    func => \&mod_simpleregexp,
+    show_contextlines => 1
   }
 );
 
@@ -30,12 +32,13 @@ pod2usage("no module selected") if scalar @ARGV == 0;
 for (@ARGV) {
   my $mod = $modules{$_};
   pod2usage("module $_ is unkown") if not defined $mod;
-  push @mods, $_;
+  push @mods, $mod;
+  $mod->{show_context} = $opts{c} || $mod->{show_context} || 30;
+  $mod->{show_contextlines} = $opts{l} || $mod->{show_contextlines} || 0;
+  $mod->{show_info} = $opts{i} || $mod->{show_info} || 0;
+  $mod->{shortname} = $_;
 }
 
-my $show_context = $opts{c} || 30;
-my $show_contextlines = $opts{l} || 0;
-my $show_info = $opts{i} || 0;
 my $count = 0;
 
 #TODO: diese globalen Variablen entfernen
@@ -62,7 +65,7 @@ while(defined($page = $parser->next)) {
   foreach my $mod (@mods) {
     ($found, $context, $info) = ();
 
-    $modules{$mod}->{func}->($page);
+    $mod->{func}->($mod, $page);
   
     output_one($mod, $title) if $found;
   }
@@ -109,10 +112,10 @@ sub print_stats {
 ###########################################
 sub mod_simpleregexp {
 ###########################################
-  my($page) = @_;
+  my($mod, $page) = @_;
   $_ = ${$page->text};
   while (/Begriffskl.rung/i) {
-    insert_found($page->title,$`,$&,$');
+    insert_found($mod, $page->title,$`,$&,$');
     $_=$';
   }
 }
@@ -134,7 +137,7 @@ sub mod_selbstlinks {
 ###########################################
 sub mod_datumsformat {
 ###########################################
-  my($page) = @_;
+  my($mod, $page) = @_;
   return unless $page->namespace eq ''; # nur Artikel-Namensrausm
   
   $_ = ${$page->text};
@@ -170,7 +173,7 @@ sub mod_datumsformat {
         $` !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
         $` !~ /\[\[(Bild|Image):[^\]\|]*$/i # Bild-Wikilink
       ) {
-      insert_found($page->title,$`,$&,$');
+      insert_found($mod, $page->title,$`,$&,$');
     }
   }
 }
@@ -193,7 +196,10 @@ sub mod_plusdagger {
 ###########################################
 sub insert_found {
 ###########################################
-  my($title, $before, $match, $after) = @_;
+  my($mod, $title, $before, $match, $after) = @_;
+  my $show_context = $mod->{show_context};
+  my $show_info = $mod->{show_info};
+  
   $found++;
   $context .= substr($before,length($before)-$show_context,$show_context)
         	      .$match.substr($after,0,$show_context)."\n";
@@ -208,8 +214,11 @@ sub insert_found {
 sub output_one {
 ###########################################
   my ($mod, $title) = @_;
+  my $show_context = $mod->{show_context};
+  my $show_info = $mod->{show_info};
+  my $show_contextlines = $mod->{show_contextlines};
   chomp $context;
-  print "$mod: ";
+  print "$mod->{shortname}: ";
   print "*[[$title]]";
   if ($info) {
     print $info;
