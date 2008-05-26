@@ -4,35 +4,39 @@ use Getopt::Std;
 use Pod::Usage;
 use Parse::MediaWikiDump;
 
+binmode(STDOUT, ":utf8");
+
+my %modules = ( 
+  dk => { 
+    name => "Datumskonventionen", 
+    func => \&mod_datumsformat
+  },
+  'grep' => {
+    name => "Grep",
+    func => \&mod_simpleregexp
+  }
+);
+
 getopts("hc:l:i:", \my %opts);
 
 pod2usage(-verbose => 1) if $opts{h};
 pod2usage unless @ARGV;
 
-binmode(STDOUT, ":utf8");
+my $filename = shift @ARGV;
+
+my @mods;
+
+pod2usage("no module selected") if scalar @ARGV == 0;
+for (@ARGV) {
+  my $mod = $modules{$_};
+  pod2usage("module $_ is unkown") if not defined $mod;
+  push @mods, $mod;
+}
 
 my $show_context = $opts{c} || 30;
 my $show_contextlines = $opts{l} || 0;
 my $show_info = $opts{i} || 0;
 my $count = 0;
-my $modstr = $ARGV[0];
-my $mod;
-my $fileext;
-if ($modstr eq "dk") {
-  $mod = \&mod_datumsformat;
-} elsif ($modstr eq "sl" ) {
-  $mod = \&mod_selbstlinks;
-} elsif ($modstr eq "grep" ) {
-  shift(@ARGV);
-  $mod = \&mod_simpleregexp;
-} else {
-  pod2usage("no module selected");
-}
-
-#mod_selbstlinks($p, $title, $text);
-#mod_plusdagger($p, $title, $text);
-
-my $filename = $ARGV[1];
 
 my %found;
 my %context;
@@ -54,14 +58,17 @@ while(defined($page = $parser->next)) {
 
   my $title = $page->title;
 
-  &$mod($page);
+  foreach my $mod (@mods) {
+
+    $mod->{func}->($page);
+  
+    if ($found{$title}){
+      chomp $context{$title};
+      output_one($title);
+    }
+  }
   
   print_progress() if ($count % 1000 == 0);
-
-  if ($found{$title}){
-    chomp $context{$title};
-    output_one($title);
-  }
 }
 
 print_progress();
@@ -105,7 +112,7 @@ sub mod_simpleregexp {
 ###########################################
   my($page) = @_;
   $_ = ${$page->text};
-  while (/$ARGV[0]/i) {
+  while (/Begriffskl.rung/i) {
     insert_found($page->title,$`,$&,$');
     $_=$';
   }
