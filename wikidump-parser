@@ -12,6 +12,11 @@ my %modules = (
     func => \&mod_datumsformat,
     show_info => 5
   },
+  bkl => { 
+    name => "Begriffsklaerung", 
+    func => \&mod_bkl,
+    show_info => -1
+  },
   'grep' => {
     name => "Grep",
     func => \&mod_simpleregexp,
@@ -135,6 +140,17 @@ sub mod_selbstlinks {
     $_=$';
   }
 }
+
+###########################################
+sub mod_bkl {
+###########################################
+  my($mod, $page) = @_;
+  $_ = ${$page->text};
+  if (/^\s*\{\{Begriffskl.rung\}\}/i) {
+    insert_found($mod, $page->title, undef ,"pos", undef);
+  }
+}
+
 
 ###########################################
 sub mod_datumsformat {
