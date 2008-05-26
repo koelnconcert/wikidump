@@ -243,7 +243,7 @@ sub output_one {
   if ($info) {
     print $info;
   }
-  if ($found > $show_info) {
+  if ($found > $show_info && $show_info >= 0) {
     print " ($found)";
   }
   print "\n";
