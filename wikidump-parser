@@ -201,8 +201,10 @@ sub insert_found {
   my $show_info = $mod->{show_info};
   
   $found++;
-  $context .= substr($before,length($before)-$show_context,$show_context)
+  if ($show_context) {
+    $context .= substr($before,length($before)-$show_context,$show_context)
         	      .$match.substr($after,0,$show_context)."\n";
+  }
   if ($found <= $show_info || $show_info == -1) {
     $info .= ", $match";
   } elsif ($found == $show_info + 1 && $show_info != 0) {
