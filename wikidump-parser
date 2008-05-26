@@ -33,9 +33,11 @@ for (@ARGV) {
   my $mod = $modules{$_};
   pod2usage("module $_ is unkown") if not defined $mod;
   push @mods, $mod;
-  $mod->{show_context} = $opts{c} || $mod->{show_context} || 30;
-  $mod->{show_contextlines} = $opts{l} || $mod->{show_contextlines} || 0;
-  $mod->{show_info} = $opts{i} || $mod->{show_info} || 0;
+  $mod->{show_context} ||= 30;
+  $mod->{show_contextlines} ||= 0;
+  $mod->{show_info} ||=0;
+  $mod->{show_contextlines} = $opts{l} if defined $opts{l};
+  $mod->{show_info} = $opts{i} if defined $opts{i};
   $mod->{shortname} = $_;
 }
 
@@ -233,6 +235,7 @@ sub output_one {
   my $i = 0;
   foreach my $line (split /\n/, $context) {
     if ($i++ < $show_contextlines || $show_contextlines == -1) { 
+      print "$mod->{shortname}: ";
       print "<nowiki>$line</nowiki><br/>\n"; 
     }
   }
