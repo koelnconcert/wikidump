@@ -17,6 +17,12 @@ my %modules = (
     func => \&mod_bkl,
     show_info => -1
   },
+  dagger => { 
+    name => "Pluszeichen als Dagger", 
+    func => \&mod_plusdagger,
+    show_context => 10,
+    show_contextlines => 5
+  },
   'grep' => {
     name => "Grep",
     func => \&mod_simpleregexp,
@@ -72,7 +78,7 @@ while(defined($page = $parser->next)) {
   foreach my $mod (@mods) {
     ($found, $context, $info) = ();
 
-    $mod->{func}->($mod, $page);
+    $mod->{func}->($mod, $page) unless $page->redirect;
   
     output_one($mod, $title) if $found;
   }
@@ -147,8 +153,9 @@ sub mod_bkl {
   my($mod, $page) = @_;
   my $title = $page->title;
   $_ = ${$page->text};
-  if (/^\s*\{\{Begriffskl.rung\}\}/i) { # Vorlage am Anfang
-    insert_simple($mod, $title ,"Position der Vorlage");
+  if (/\{\{Begriffskl.rung\}\}/i) {
+    insert_simple($mod, $title ,"Position der Vorlage") if ($` =~ /^\s*$/);
+    insert_simple($mod, $title, "Aufzaehlung") if (/^\s*#/m);
   }
 }
 
@@ -200,10 +207,10 @@ sub mod_datumsformat {
 ###########################################
 sub mod_plusdagger {
 ###########################################
-  my($p, $title, $text) = @_;
-  $_ = $text;
+  my($mod, $page) = @_;
+  $_ = ${$page->text};
   while (/[;,] ?\+ ?(\[\[)?\d{1,2}\./) {
-    insert_found($title,$`,$&,$');
+    insert_found($mod, $page->title,$`,$&,$');
     $_ = $';
   }
 }
