@@ -145,9 +145,10 @@ sub mod_selbstlinks {
 sub mod_bkl {
 ###########################################
   my($mod, $page) = @_;
+  my $title = $page->title;
   $_ = ${$page->text};
-  if (/^\s*\{\{Begriffskl.rung\}\}/i) {
-    insert_found($mod, $page->title, undef ,"pos", undef);
+  if (/^\s*\{\{Begriffskl.rung\}\}/i) { # Vorlage am Anfang
+    insert_simple($mod, $title ,"Position der Vorlage");
   }
 }
 
@@ -228,6 +229,13 @@ sub insert_found {
   } elsif ($found == $show_info + 1 && $show_info != 0) {
     $info .= ", ...";
   }
+}
+
+###########################################
+sub insert_simple {
+###########################################
+  my ($mod, $title, $text) = @_;
+  insert_found($mod, $title, undef, $text, undef);
 }
 
 ###########################################
