@@ -17,6 +17,12 @@ my %modules = (
     func => \&mod_bkl,
     show_info => -1
   },
+  red => { 
+    name => "Redirects", 
+    func => \&mod_redirects,
+    redirects => 1, 
+    show_info => -1
+  },
   dagger => { 
     name => "Pluszeichen als Dagger", 
     func => \&mod_plusdagger,
@@ -50,6 +56,7 @@ for (@ARGV) {
   $mod->{show_contextlines} = $opts{l} if defined $opts{l};
   $mod->{show_info} = $opts{i} if defined $opts{i};
   $mod->{shortname} = $_;
+  $mod->{redirects} ||=0;
 }
 
 my $count = 0;
@@ -78,7 +85,7 @@ while(defined($page = $parser->next)) {
   foreach my $mod (@mods) {
     ($found, $context, $info) = ();
 
-    $mod->{func}->($mod, $page) unless $page->redirect;
+    $mod->{func}->($mod, $page) unless $page->redirect and !$mod->{redirects};
   
     output_one($mod, $title) if $found;
   }
@@ -163,6 +170,18 @@ sub mod_bkl {
   }
 }
 
+###########################################
+sub mod_redirects {
+###########################################
+  my($mod, $page) = @_;
+  return unless $page->redirect;
+  my $title = $page->title;
+  $_ = ${$page->text};
+  s/\#REDIRECT//i;
+  s/\[\[.*?\]\]//g; # Links entfernen (inkl. Kategorien)
+  s/\s//g; # Leerzeichen entfernen
+  insert_simple($mod, $title ,"Text") if length $_ > 0; 
+}
 
 ###########################################
 sub mod_datumsformat {
