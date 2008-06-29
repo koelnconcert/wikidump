@@ -181,6 +181,7 @@ sub mod_redirects {
   s/\#REDIRECT.*$//mi; 
   my $context_hack = $_; #Hack
   s/\[\[.*?\]\]//g; # Links entfernen (inkl. Kategorien)
+  s/\{\{.*?\}\}//sg; # Vorlagen entfernen
   s/\s//g; # Leerzeichen entfernen
   insert_simple($mod, $title ,"Text (" . (length $_) . ")") if length $_ > 0; 
   $context = $context_hack;
