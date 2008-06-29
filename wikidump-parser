@@ -209,7 +209,7 @@ sub mod_plusdagger {
 ###########################################
   my($mod, $page) = @_;
   $_ = ${$page->text};
-  while (/[;,] ?\+ ?(\[\[)?\d{1,2}\./) {
+  while (/[(;,] ?\+ ?(\[\[)?\d{1,2}\./) {
     insert_found($mod, $page->title,$`,$&,$');
     $_ = $';
   }
@@ -267,7 +267,7 @@ sub output_one {
   foreach my $line (split /\n/, $context) {
     if ($i++ < $show_contextlines || $show_contextlines == -1) { 
       print "$mod->{shortname}: ";
-      print "<nowiki>$line</nowiki><br/>\n"; 
+      print "**<nowiki>$line</nowiki>\n"; 
     }
   }
 }
