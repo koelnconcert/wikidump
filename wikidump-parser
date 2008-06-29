@@ -151,11 +151,15 @@ sub mod_selbstlinks {
 sub mod_bkl {
 ###########################################
   my($mod, $page) = @_;
+  return unless $page->namespace eq ''; # nur Artikel-Namensrausm
   my $title = $page->title;
   $_ = ${$page->text};
   if (/\{\{Begriffskl.rung\}\}/i) {
     insert_simple($mod, $title ,"Position der Vorlage") if ($` =~ /^\s*$/);
     insert_simple($mod, $title, "Aufzaehlung") if (/^\s*#/m);
+  }
+  if (/\[\[Kategorie: *Begriffskl.rung/i) {
+    insert_simple($mod, $title, "Kategorie");
   }
 }
 
