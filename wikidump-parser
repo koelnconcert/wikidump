@@ -197,7 +197,7 @@ sub mod_datumsformat {
 
   s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
-  s/^[\| ]*(Abbildung|Bild|Picture)\s*=.*$//img; # Bild-Parameter in Infoboxen
+#  s/^[\| ]*(Abbildung|Bild)\s*=.*$//img; # Bild-Parameter in Infoboxen (veraltet)
 
   # todo: 
   # Zitat-Vorlagen
@@ -225,17 +225,20 @@ sub mod_datumsformat {
       $a !~ /^[^<]*\/>/ and # für <ref name="....." />
       $b !~ /<!--[^>]*$/s and # Kommentar
       $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
-      $b !~ /\[\[(Bild|Image):[^\]\|]*$/i # Bild-Wikilink
+      $b !~ /\[\[(Bild|Image):[^\]\|]*$/i and # Bild-Wikilink
+      $a !~ /^[^|]{0,30}\.(jpg|gif|svg) *[|\n]/i and 
+        #Zeilen/Parameter mit Bild-Endungen am Ende
+      1
     );
   }
 
   while (/(?<![.0-9])(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)(?!\.?\d)/g) {
-  #  insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
+    insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
   }
   
-  while (/(?<![\-0-9])(\d{2,4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
+  while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
     if (_check($3, $2, $1, $`, $') and
-        $` !~ /(CAS|DIN|EN).{0,5}$/ 
+1#        $` !~ /(CAS|DIN|EN|VDE).{0,9}$/ 
     ) {
       insert_found($mod, $page->title,$`,$&,$') 
     }
