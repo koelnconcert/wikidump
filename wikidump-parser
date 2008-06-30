@@ -10,7 +10,8 @@ my %modules = (
   dk => { 
     name => "Datumskonventionen", 
     func => \&mod_datumsformat,
-    show_info => 5
+    show_info => 5,
+    show_contextlines => 5
   },
   bkl => { 
     name => "Begriffsklaerung", 
@@ -21,7 +22,8 @@ my %modules = (
     name => "Redirects", 
     func => \&mod_redirects,
     redirects => 1, 
-    show_info => -1
+    show_info => -1,
+    show_contextlines => -1
   },
   dagger => { 
     name => "Pluszeichen als Dagger", 
@@ -238,7 +240,7 @@ sub mod_datumsformat {
   
   while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
     if (_check($3, $2, $1, $`, $') and
-1#        $` !~ /(CAS|DIN|EN|VDE).{0,9}$/ 
+        $` !~ /(CAS|DIN|EN|VDE|ISO).{0,9}$/ 
     ) {
       insert_found($mod, $page->title,$`,$&,$') 
     }

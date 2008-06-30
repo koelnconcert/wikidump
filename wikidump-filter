@@ -16,16 +16,25 @@ while (<DATEI>) {
   $filter{$lemma} = $_;
 }
 
+my $filtered = 1;
 
 while (<STDIN>) {
-  /^\* *\[\[(.*?)\]\]/;
-  $lemma = $1;
-  $lemma =~ tr/_/ /;
-  if (defined $filter{$lemma}) {
-    delete $filter{$lemma};
+  if (/^\* *\[\[(.*?)\]\]/) {;
+    $lemma = $1;
+    $lemma =~ tr/_/ /;
+    if (defined $filter{$lemma}) {
+      delete $filter{$lemma};
+      $filtered = 1;
+    } else {
+      print $_;
+      $filtered = 0;
+    }
+  } elsif (/^\*\*<nowiki>/) {
+    print $_ unless $filtered;
   } else {
     print $_;
   }
+    
 }
 
 print STDERR sort values %filter;
