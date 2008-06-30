@@ -197,7 +197,7 @@ sub mod_datumsformat {
 
   s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
-  s/^[\| ]*(Abbildung|Bild)\s*=.*$//img; # Bild-Parameter in Infoboxen
+  s/^[\| ]*(Abbildung|Bild|Picture)\s*=.*$//img; # Bild-Parameter in Infoboxen
 
   # todo: 
   # Zitat-Vorlagen
@@ -208,27 +208,39 @@ sub mod_datumsformat {
   # Kommentare über mehrere Zeilen werden nicht erkannt
   # {{Großes Bild}} 
 
-  while (/(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)/g) {
-    if ($' !~ /^\.?\d/ and   # nur drei Zahlengruppen
-        $` !~ /\d\.?$/ and  
-	$2 <= 12 and  # plausibles Datum 
-	$2 >= 1 and  # plausibles Datum 
-	$1 <= 31 and
-	$1 >= 1 and
-	$` !~ /http:\/\/\S*$/ and # link
-	$' !~ /^\s*<!-- ?sic/ and #sic-Kommentar
-        $` !~ /[|=]\s*$/s and # parameter oder Tabelle
-        $' !~ /^\s*\|/s and # parameter oder Tabelle
-        $' !~ /^[^\[\]]*\][^\]]+/s and # vermutlich http-link
-	$' !~ /^[^<]*<\/(ref|small|gallery)>/s and # small- und ref-Tag
-	$' !~ /^[^<]*\/>/ and # für <ref name="....." />
-	$` !~ /<!--[^>]*$/s and # Kommentar
-        $` !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
-        $` !~ /\[\[(Bild|Image):[^\]\|]*$/i # Bild-Wikilink
-      ) {
-      insert_found($mod, $page->title,$`,$&,$');
+  sub _check {
+    my ($day, $month, $year, $before, $after) = @_;
+    my ($a, $b) = ($after, $before);
+    return (
+      $month <= 12 and  # plausibles Datum 
+      $month >= 1 and  # plausibles Datum 
+      $day <= 31 and
+      $day >= 1 and
+      $b !~ /http:\/\/\S*$/ and # link
+      $a !~ /^\s*<!-- ?sic/ and #sic-Kommentar
+      $b !~ /[|=]\s*$/s and # parameter oder Tabelle
+      $a !~ /^\s*\|/s and # parameter oder Tabelle
+      $a !~ /^[^\[\]]*\][^\]]+/s and # vermutlich http-link
+      $a !~ /^[^<]*<\/(ref|small|gallery)>/s and # small- und ref-Tag
+      $a !~ /^[^<]*\/>/ and # für <ref name="....." />
+      $b !~ /<!--[^>]*$/s and # Kommentar
+      $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
+      $b !~ /\[\[(Bild|Image):[^\]\|]*$/i # Bild-Wikilink
+    );
+  }
+
+  while (/(?<![.0-9])(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)(?!\.?\d)/g) {
+  #  insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
+  }
+  
+  while (/(?<![\-0-9])(\d{2,4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
+    if (_check($3, $2, $1, $`, $') and
+        $` !~ /(CAS|DIN|EN).{0,5}$/ 
+    ) {
+      insert_found($mod, $page->title,$`,$&,$') 
     }
   }
+
 }
 
 ###########################################
