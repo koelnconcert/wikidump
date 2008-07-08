@@ -218,6 +218,7 @@ sub mod_datumsformat {
       $month >= 1 and  # plausibles Datum 
       $day <= 31 and
       $day >= 1 and
+      $year <= 2100 and
       $b !~ /http:\/\/\S*$/ and # link
       $a !~ /^\s*<!-- ?sic/ and #sic-Kommentar
       $b !~ /[|=]\s*$/s and # parameter oder Tabelle
@@ -228,7 +229,7 @@ sub mod_datumsformat {
       $b !~ /<!--[^>]*$/s and # Kommentar
       $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
       $b !~ /\[\[(Bild|Image):[^\]\|]*$/i and # Bild-Wikilink
-      $a !~ /^[^|]{0,30}\.(jpg|gif|svg) *[|\n]/i and 
+      $a !~ /^[^|]{0,30}\.(jpe?g|gif|svg|png|ogg) *[|\n]/i and 
         #Zeilen/Parameter mit Bild-Endungen am Ende
       1
     );
