@@ -9,7 +9,7 @@ binmode(STDOUT, ":utf8");
 binmode(STDIN, ":utf8");
 
 while (<STDIN>) {
-  if (/^\*\*/) {
+  if (/\*\*/) {
     my $last = pop @input;
     push @input, $last.$_;
   } else {
