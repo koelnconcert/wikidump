@@ -224,13 +224,17 @@ sub mod_datumsformat {
       $b !~ /[|=]\s*$/s and # parameter oder Tabelle
       $a !~ /^\s*\|/s and # parameter oder Tabelle
       $a !~ /^[^\[\]]*\][^\]]+/s and # vermutlich http-link
-      $a !~ /^[^<]*<\/(ref|small|gallery)>/s and # small- und ref-Tag
+      $a !~ /^[^<]*<\/(ref|small)>/s and # small- und ref-Tag
       $a !~ /^[^<]*\/>/ and # für <ref name="....." />
       $b !~ /<!--[^>]*$/s and # Kommentar
       $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
       $b !~ /\[\[(Bild|Image):[^\]\|]*$/i and # Bild-Wikilink
-      $a !~ /^[^|]{0,30}\.(jpe?g|gif|svg|png|ogg) *[|\n]/i and 
-        #Zeilen/Parameter mit Bild-Endungen am Ende
+      $a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg) *[|\n]/i and
+        # Zeilen/Parameter mit Bild-Endungen am Ende
+      $a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i and # nicht "freistehend"
+        # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
+      $b !~ /Version\s*$/i and 
+        # Buzz-Wort
       1
     );
   }
@@ -241,7 +245,7 @@ sub mod_datumsformat {
   
   while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
     if (_check($3, $2, $1, $`, $') and
-        $` !~ /(CAS|DIN|EN|VDE|ISO).{0,9}$/ 
+        $` !~ /(CAS|DIN|EN|VDE|ISO|EC).{0,9}$/ 
     ) {
       insert_found($mod, $page->title,$`,$&,$') 
     }
