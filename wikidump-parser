@@ -224,7 +224,7 @@ sub mod_datumsformat {
       $b !~ /[|=]\s*$/s and # parameter oder Tabelle
       $a !~ /^\s*\|/s and # parameter oder Tabelle
       $a !~ /^[^\[\]]*\][^\]]+/s and # vermutlich http-link
-      $a !~ /^[^<]*<\/(ref|small)>/s and # small- und ref-Tag
+      $a !~ /^[^<]*<\/(ref)>/s and # small- und ref-Tag
       $a !~ /^[^<]*\/>/ and # für <ref name="....." />
       $b !~ /<!--[^>]*$/s and # Kommentar
       $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
