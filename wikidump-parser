@@ -197,9 +197,10 @@ sub mod_datumsformat {
   
   $_ = ${$page->text};
 
+  s/<!--.*?-->/<!-- -->/sg; # Kommentare leeren
+
   s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
-#  s/^[\| ]*(Abbildung|Bild)\s*=.*$//img; # Bild-Parameter in Infoboxen (veraltet)
 
   # todo: 
   # Zitat-Vorlagen
@@ -220,13 +221,12 @@ sub mod_datumsformat {
       $day >= 1 and
       $year <= 2100 and
       $b !~ /http:\/\/\S*$/ and # link
-      $a !~ /^\s*<!-- ?sic/ and #sic-Kommentar
+      $a !~ /^\s*<!--/ and # Kommentar danach
       $b !~ /[|=]\s*$/s and # parameter oder Tabelle
       $a !~ /^\s*\|/s and # parameter oder Tabelle
       $a !~ /^[^\[\]]*\][^\]]+/s and # vermutlich http-link
       $a !~ /^[^<]*<\/(ref)>/s and # small- und ref-Tag
       $a !~ /^[^<]*\/>/ and # für <ref name="....." />
-      $b !~ /<!--[^>]*$/s and # Kommentar
       $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
       $b !~ /\[\[(Bild|Image):[^\]\|]*$/i and # Bild-Wikilink
       $a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg) *[|\n]/i and
