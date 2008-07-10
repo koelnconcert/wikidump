@@ -208,7 +208,6 @@ sub mod_datumsformat {
   # Chartplatzierungen sieht komisch aus
   # Literatur/Weblinks/etc.-Abschnitte verbessern (auch "===")
   #   z.B. [[Alfred Philippson]]
-  # Kommentare über mehrere Zeilen werden nicht erkannt
   # {{Großes Bild}} 
 
   sub _check {
@@ -228,7 +227,6 @@ sub mod_datumsformat {
       $a !~ /^[^<]*<\/(ref)>/s and # small- und ref-Tag
       $a !~ /^[^<]*\/>/ and # für <ref name="....." />
       $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
-      $b !~ /\[\[(Bild|Image):[^\]\|]*$/i and # Bild-Wikilink
       $a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg) *[|\n]/i and
         # Zeilen/Parameter mit Bild-Endungen am Ende
       $a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i and # nicht "freistehend"
