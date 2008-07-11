@@ -231,7 +231,7 @@ sub mod_datumsformat {
         # Zeilen/Parameter mit Bild-Endungen am Ende
       $a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i and # nicht "freistehend"
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
-      $b !~ /Version\s*$/i and 
+      $b !~ /(version|kernel|linux|mac os|os x)(\]\])?\s*$/i and 
         # Buzz-Wort
       1
     );
