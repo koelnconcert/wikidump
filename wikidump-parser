@@ -237,15 +237,63 @@ sub mod_datumsformat {
     );
   }
 
+  #
+  # 1.2.1999, 01.02.99
+  #
+
   while (/(?<![.0-9])(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)(?!\.?\d)/g) {
     insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
   }
+
+  #
+  # 1999-2-1, 1999-02-01
+  #
   
   while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
     if (_check($3, $2, $1, $`, $') and
         $` !~ /(CAS|DIN|EN|VDE|ISO|EC).{0,9}$/ 
     ) {
       insert_found($mod, $page->title,$`,$&,$') 
+    }
+  }
+
+  #
+  # 01. Februar 1999,  02. Apr. 2008
+  #
+ 
+  my %monat = (
+    Januar => 1, "Jan." => 2, "Jänner" => 1, "Jän." => 1,
+    Februar => 2, "Feb." => 2,
+    "März" => 3, "Mär" => 3,
+    April => 4, "Apr." => 4,
+    Mai => 5,
+    Juni => 6, "Jun." => 6,
+    Juli => 7, "Jul." => 7,
+    August => 8, "Aug." => 8,
+    September => 9, "Sep." => 9,
+    Oktober => 10, "Okt." => 10,
+    November => 11, "Nov." => 11,
+    Dezember => 12, "Dez." => 12 );
+
+  while (/\b(0\d)\.\s*([\w\.]+)\s+(\d{4})(?!\d)/g) {
+    if (defined $monat{$2} and
+        _check($1, $monat{$2}, 2000, $`, $')
+    ) {
+      insert_found($mod, $page->title,$`,$&,$');
+    }
+  }
+
+  #
+  # 1. Januar 38
+  #
+
+  if (! /[vn]\. Chr\./) {
+    while (/\b(\d{1,2})\.\s*([\w\.]+)\s+(\d{2})(?!\.?\d)/g) {
+      if (defined $monat{$2} and
+          _check($1, $monat{$2}, 2000, $`, $')
+      ) {
+#        insert_found($mod, $page->title,$`,$&,$');
+      }
     }
   }
 
