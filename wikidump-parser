@@ -13,6 +13,12 @@ my %modules = (
     show_info => 5,
     show_contextlines => 5
   },
+  "dkyy" => { 
+    name => "Datumskonventionen (yy)", 
+    func => \&mod_datumsformat,
+    show_info => 5,
+    show_contextlines => 5
+  },
   bkl => { 
     name => "Begriffsklaerung", 
     func => \&mod_bkl,
@@ -241,19 +247,23 @@ sub mod_datumsformat {
   # 1.2.1999, 01.02.99
   #
 
-  while (/(?<![.0-9])(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)(?!\.?\d)/g) {
-    insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
+  if ($mod->{shortname} eq "dk") {
+    while (/(?<![.0-9])(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)(?!\.?\d)/g) {
+      insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
+    }
   }
 
   #
   # 1999-2-1, 1999-02-01
   #
   
-  while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
-    if (_check($3, $2, $1, $`, $') and
-        $` !~ /(CAS|DIN|EN|VDE|ISO|EC).{0,9}$/ 
-    ) {
-      insert_found($mod, $page->title,$`,$&,$') 
+  if ($mod->{shortname} eq "dk") {
+    while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
+      if (_check($3, $2, $1, $`, $') and
+          $` !~ /(CAS|DIN|EN|VDE|ISO|EC).{0,9}$/ 
+      ) {
+        insert_found($mod, $page->title,$`,$&,$') 
+      }
     }
   }
 
@@ -275,11 +285,13 @@ sub mod_datumsformat {
     November => 11, "Nov." => 11,
     Dezember => 12, "Dez." => 12 );
 
-  while (/\b(0\d)\.\s*([\w\.]+)\s+(\d{4})(?!\d)/g) {
-    if (defined $monat{$2} and
-        _check($1, $monat{$2}, 2000, $`, $')
-    ) {
-      insert_found($mod, $page->title,$`,$&,$');
+  if ($mod->{shortname} eq "dk") {
+    while (/\b(0\d)\.\s*([\w\.]+)\s+(\d{4})(?!\d)/g) {
+      if (defined $monat{$2} and
+          _check($1, $monat{$2}, 2000, $`, $')
+      ) {
+        insert_found($mod, $page->title,$`,$&,$');
+      }
     }
   }
 
@@ -287,12 +299,12 @@ sub mod_datumsformat {
   # 1. Januar 38
   #
 
-  if (! /[vn]\. Chr\./) {
+  if ($mod->{shortname} eq "dkyy" and ! /[vn]\. Chr\./) {
     while (/\b(\d{1,2})\.\s*([\w\.]+)\s+(\d{2})(?!\.?\d)/g) {
       if (defined $monat{$2} and
           _check($1, $monat{$2}, 2000, $`, $')
       ) {
-#        insert_found($mod, $page->title,$`,$&,$');
+        insert_found($mod, $page->title,$`,$&,$');
       }
     }
   }
