@@ -90,7 +90,14 @@ my $parser= Parse::MediaWikiDump::Pages->new($filename);
 my $page;
 
 my $time_start = time;
-my $time_last = $time_start;
+my @time_hist;
+my @byte_hist;
+my $time_hist_length = 10;
+for (my $i = 0; $i < $time_hist_length; $i++) {
+  push @time_hist, $time_start;
+  push @byte_hist, 0;
+}
+my $progress_step = 100; # in Artikeln
 
 while(defined($page = $parser->next)) {
   $count++;
@@ -105,31 +112,45 @@ while(defined($page = $parser->next)) {
     output_one($mod, $title) if $found;
   }
   
-  print_progress() if ($count % 1000 == 0);
+  print_progress() if ($count % $progress_step == 0);
 }
 
 print_progress();
+print STDERR "\n";
 print_stats();
 
 ###########################################
 sub print_progress {
 ###########################################
   my $time_cur = time;
-
   my $byte_cur = $parser->current_byte;
-  my $size = $parser->size;
-  my $time_diff = $time_cur - $time_start;
-  my $rate = $byte_cur / ($time_cur - $time_start);
-  my $eta = int (($size - $byte_cur) / $rate);
-  printf STDERR '%2.2f%% %d:%02d %d:%02d (%.2f MB/s)'."\n", 
-    $byte_cur/$size*100,
-    $time_diff / 60,
-    $time_diff % 60,
-    $eta / 60,
-    $eta % 60,
-    $rate / 1024 / 1024;
+  
+  my $time_last = shift @time_hist;
+  my $byte_last = shift @byte_hist;
 
-  $time_last = $time_cur;
+  my $size = $parser->size;
+
+  sub _print {
+    my ($time_diff, $byte_diff) = @_;
+    my $rate = ($time_diff>0)?($byte_diff / ($time_diff)):0;
+    my $eta = ($rate>0)?(int (($size - $byte_cur) / $rate)):0;
+    printf STDERR '%d:%02d (%.2f MB/s)', 
+      $eta / 60,
+      $eta % 60,
+      $rate / 1024 / 1024;
+  }
+ 
+  printf STDERR "\r".'%2.2f%% %d:%02d ',
+    $byte_cur/$size*100,
+    ($time_cur-$time_start) / 60,
+    ($time_cur-$time_start) % 60;
+  print STDERR "total: ";
+  _print($time_cur - $time_start, $byte_cur);
+  print STDERR " cur: ";
+  _print($time_cur - $time_last, $byte_cur - $byte_last);
+
+  push @time_hist, $time_cur;
+  push @byte_hist, $byte_cur;
 }
 
 ###########################################
