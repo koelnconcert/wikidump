@@ -19,6 +19,12 @@ my %modules = (
     show_info => 5,
     show_contextlines => 5
   },
+  "dkyyy" => { 
+    name => "Datumskonventionen (yyy)", 
+    func => \&mod_datumsformat,
+    show_info => 5,
+    show_contextlines => 5
+  },
   bkl => { 
     name => "Begriffsklaerung", 
     func => \&mod_bkl,
@@ -251,7 +257,23 @@ sub mod_datumsformat {
   #
 
   if ($mod->{shortname} eq "dk") {
-    while (/(?<![.0-9])(\d{1,2})\. ?(\d{1,2})\. ?(\d{2}(\d{2})?)(?!\.?\d)/g) {
+    while (/(?<![.0-9])(\d{1,2})\.\ *(\d{1,2})\. # Tag und Monat
+            (?:\]\])?\ *(?:\[\[)? # Verlinkungen
+	    (\d{2}(\d{2})?)(?!\.?\d) # Jahr
+	   /gx ) {
+      insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
+    }
+  }
+  
+  #
+  # 1.02.799
+  #
+
+  if ($mod->{shortname} eq "dkyyy") {
+    while (/(?<![.0-9])(\d{1,2})\.\ *(\d{1,2})\. # Tag und Monat
+            (?:\]\])?\ *(?:\[\[)? # Verlinkungen
+	    (\d{3})(?!\.?\d) # Jahr
+	   /gx ) {
       insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
     }
   }
@@ -341,6 +363,7 @@ sub insert_found {
     $context .= substr($before,length($before)-$show_context,$show_context)
         	      .$match.substr($after,0,$show_context)."\n";
   }
+  $match = "<nowiki>$match</nowiki>" if $match =~ /[\[\]]/;
   if ($found <= $show_info || $show_info == -1) {
     $info .= ", $match";
   } elsif ($found == $show_info + 1 && $show_info != 0) {
