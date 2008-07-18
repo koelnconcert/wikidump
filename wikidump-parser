@@ -72,6 +72,7 @@ for (@ARGV) {
   $mod->{show_info} = $opts{i} if defined $opts{i};
   $mod->{shortname} = $_;
   $mod->{redirects} ||=0;
+  $mod->{count} = 0; # found-counter
 }
 
 my $count = 0;
@@ -109,7 +110,11 @@ while(defined($page = $parser->next)) {
 
     $mod->{func}->($mod, $page) unless $page->redirect and !$mod->{redirects};
   
-    output_one($mod, $title) if $found;
+    if ($found) {
+      $mod->{count}++;
+      output_one($mod, $title);
+    }
+
   }
   
   print_progress() if ($count % $progress_step == 0);
@@ -117,7 +122,6 @@ while(defined($page = $parser->next)) {
 
 print_progress();
 print STDERR "\n";
-print_stats();
 
 ###########################################
 sub print_progress {
@@ -130,35 +134,33 @@ sub print_progress {
 
   my $size = $parser->size;
 
-  sub _print {
-    my ($time_diff, $byte_diff) = @_;
+  sub _print_rate {
+    my ($text, $time_diff, $byte_diff) = @_;
     my $rate = ($time_diff>0)?($byte_diff / ($time_diff)):0;
     my $eta = ($rate>0)?(int (($size - $byte_cur) / $rate)):0;
-    printf STDERR '%d:%02d (%.2f MB/s)', 
+    printf STDERR ' %s: %d:%02d (%.2f MB/s)', 
+      $text,
       $eta / 60,
       $eta % 60,
       $rate / 1024 / 1024;
   }
  
-  printf STDERR "\r".'%2.2f%% %d:%02d ',
+  printf STDERR "\r".'%2.2f%% %d:%02d',
     $byte_cur/$size*100,
     ($time_cur-$time_start) / 60,
     ($time_cur-$time_start) % 60;
-  print STDERR "total: ";
-  _print($time_cur - $time_start, $byte_cur);
-  print STDERR " cur: ";
-  _print($time_cur - $time_last, $byte_cur - $byte_last);
+  _print_rate("total", $time_cur - $time_start, $byte_cur);
+  _print_rate("cur", $time_cur - $time_last, $byte_cur - $byte_last);
+
+  print STDERR " mods:";
+  foreach my $mod (@mods) {
+    printf STDERR " %s (%i)",
+      $mod->{shortname},
+      $mod->{count};
+  }
 
   push @time_hist, $time_cur;
   push @byte_hist, $byte_cur;
-}
-
-###########################################
-sub print_stats {
-###########################################
-#  my $hits = scalar keys %found;
-#  printf STDERR "hits %d/%d (%.2f%%)\n",
-#    $hits, $count, 1.0 * $hits / $count * 100;
 }
 
 ###########################################
