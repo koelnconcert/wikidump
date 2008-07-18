@@ -274,11 +274,11 @@ sub mod_datumsformat {
       $a !~ /^[^<]*<\/(ref)>/s and # small- und ref-Tag
       $a !~ /^[^<]*\/>/ and # für <ref name="....." />
       $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
-      $a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg) *[|\n]/i and
+      $a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|pdf) *[|\n]/i and
         # Zeilen/Parameter mit Bild-Endungen am Ende
       $a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i and # nicht "freistehend"
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
-      $b !~ /(version|kernel|linux|mac os|os x)(\]\])?\s*$/i and 
+      $b !~ /(version|kernel|linux|mac os|os x)(\]\])?[ :=]*$/i and 
         # Buzz-Wort
       1
     );
@@ -306,7 +306,11 @@ sub mod_datumsformat {
             (?:\]\])?\ *(?:\[\[)? # Verlinkungen
 	    (\d{3})(?!\.?\d) # Jahr
 	   /gx ) {
-      insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
+      if (_check($1, $2, $3, $`, $') and
+          $3 ne "000"
+      ) {
+        insert_found($mod, $page->title,$`,$&,$');
+      }	
     }
   }
 
