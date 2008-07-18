@@ -40,7 +40,8 @@ my %modules = (
   'grep' => {
     name => "Grep",
     func => \&mod_simpleregexp,
-    show_contextlines => 1
+    show_info => -1,
+    show_contextlines => 5
   }
 );
 
@@ -141,10 +142,12 @@ sub print_stats {
 sub mod_simpleregexp {
 ###########################################
   my($mod, $page) = @_;
+  return unless $page->namespace eq ''; # nur Artikel-Namensrausm
+  my $title = $page->title;
   $_ = ${$page->text};
-  while (/Begriffskl.rung/i) {
+  if (/class="(prettytable|wikitable)"/i) {
     insert_found($mod, $page->title,$`,$&,$');
-    $_=$';
+#    $_=$';
   }
 }
 
