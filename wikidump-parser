@@ -3,6 +3,7 @@ use strict;
 use Getopt::Std;
 use Pod::Usage;
 use Parse::MediaWikiDump;
+use List::Util qw[min max];
 
 binmode(STDOUT, ":utf8");
 
@@ -93,7 +94,7 @@ my $page;
 my $time_start = time;
 my @time_hist;
 my @byte_hist;
-my $time_hist_length = 10;
+my $time_hist_length = 100;
 for (my $i = 0; $i < $time_hist_length; $i++) {
   push @time_hist, $time_start;
   push @byte_hist, 0;
@@ -135,22 +136,30 @@ sub print_progress {
   my $size = $parser->size;
 
   sub _print_rate {
-    my ($text, $time_diff, $byte_diff) = @_;
+    my ($text, $time_cur, $time_diff, $byte_cur, $byte_diff, $lemma_diff) = @_;
     my $rate = ($time_diff>0)?($byte_diff / ($time_diff)):0;
+    my $lemma_rate = ($time_diff>0)?($lemma_diff / ($time_diff)):0;
     my $eta = ($rate>0)?(int (($size - $byte_cur) / $rate)):0;
-    printf STDERR ' %s: %d:%02d (%.2f MB/s)', 
+    my $time_end = $eta + $time_cur - $time_start;
+    printf STDERR ' %s: %d:%02d/%d:%02d (%.02f MB/s, %d A/s)', 
       $text,
       $eta / 60,
       $eta % 60,
-      $rate / 1024 / 1024;
+      $time_end / 60,
+      $time_end % 60,
+      $rate / 1024 / 1024,
+      $lemma_rate;
   }
  
   printf STDERR "\r".'%2.2f%% %d:%02d',
     $byte_cur/$size*100,
     ($time_cur-$time_start) / 60,
     ($time_cur-$time_start) % 60;
-  _print_rate("total", $time_cur - $time_start, $byte_cur);
-  _print_rate("cur", $time_cur - $time_last, $byte_cur - $byte_last);
+  _print_rate("total", $time_cur, $time_cur - $time_start,
+              $byte_cur, $byte_cur, $count);
+  _print_rate("cur", $time_cur, $time_cur - $time_last, 
+              $byte_cur, $byte_cur - $byte_last,
+              min($progress_step * $time_hist_length, $count));
 
   print STDERR " mods:";
   foreach my $mod (@mods) {
