@@ -347,9 +347,12 @@ sub mod_datumsformat {
   # 1. Januar 38
   #
 
-  if ($mod->{shortname} eq "dkyy" and ! /[vn]\. Chr\./) {
-    while (/\b(\d{1,2})\.\s*([\w\.]+)\s+(\d{2})(?!\.?\d)/g) {
+  if ($mod->{shortname} eq "dkyy" and ! /[vn]\. (Chr\.|u\. Z)/) {
+    while (/\b(\d{1,2})\.\ *([\w\.]+)\ +(\d{2})(?![.:]?\d)/g) {
       if (defined $monat{$2} and
+          $' !~ /^°/ and
+          $' !~ /^\s*((kilo|zenti|milli)?meter(see)?meilen
+	             |uhr|mark|euro)/ix and
           _check($1, $monat{$2}, 2000, $`, $')
       ) {
         insert_found($mod, $page->title,$`,$&,$');
