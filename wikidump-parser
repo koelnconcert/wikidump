@@ -210,11 +210,14 @@ sub mod_bkl {
   return unless $page->namespace eq ''; # nur Artikel-Namensrausm
   my $title = $page->title;
   $_ = ${$page->text};
-  if (/\{\{Begriffskl.rung\}\}/i) {
+  if (/\{\{[Bb]egriffsklärung\}\}/) {
     insert_simple($mod, $title ,"Position der Vorlage") if ($` =~ /^\s*$/);
     insert_simple($mod, $title, "Aufzaehlung") if (/^\s*#/m);
   }
-  if (/\[\[Kategorie: *Begriffskl.rung/i) {
+  if (/\{\{BKL\}\}/) {
+    insert_simple($mod, $title, "Falsche Vorlage");
+  }
+  if (/\[\[[KkCc]ategorie: *Begriffsklärung\]\]/) {
     insert_simple($mod, $title, "Kategorie");
   }
 }
