@@ -213,6 +213,7 @@ sub mod_bkl {
   if (/\{\{[Bb]egriffsklärung\}\}/) {
     insert_simple($mod, $title ,"Position der Vorlage") if ($` =~ /^\s*$/);
     insert_simple($mod, $title, "Aufzaehlung") if (/^\s*#/m);
+    insert_simple($mod, $title, "fehlende Einleitung") if (/^\s*\*/);
   }
   if (/\{\{BKL\}\}/) {
     insert_simple($mod, $title, "Falsche Vorlage");
