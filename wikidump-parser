@@ -119,6 +119,7 @@ while(defined($page = $parser->next)) {
   }
   
   print_progress() if ($count % $progress_step == 0);
+  #last if $count > 5000;
 }
 
 print_progress();
@@ -364,12 +365,18 @@ sub mod_datumsformat {
   # 1. Januar 38
   #
 
-  if ($mod->{shortname} eq "dkyy" and ! /[vn]\. (Chr\.|u\. Z)/) {
+  if ($mod->{shortname} eq "dkyy" and ! /[vn]\. (Chr\.|u\. Z)/ 
+      and ! /Römische Kaiserzeit/
+  ) {
     while (/\b(\d{1,2})\.\ *([\w\.]+)\ +(\d{2})(?![.:]?\d)/g) {
       if (defined $monat{$2} and
-          $' !~ /^°/ and
-          $' !~ /^\s*((kilo|zenti|milli)?meter(see)?meilen
-	             |uhr|mark|euro)/ix and
+          $' !~ /^\s*(°|%|mm|km|cm)/ and
+	  $' !~ /^\?\?/ and # 19??
+	  $' !~ /^,\d/ and
+          $' !~ /^\s*(\[\[)?((kilo|zenti|milli)?meter|(see)?meile
+	         |uhr|mark|euro|prozent
+		 |tage|stunden
+		 |mann|schiffe)/ix and
           _check($1, $monat{$2}, 2000, $`, $')
       ) {
         insert_found($mod, $page->title,$`,$&,$');
