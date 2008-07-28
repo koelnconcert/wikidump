@@ -52,12 +52,14 @@ my %modules = (
   }
 );
 
-getopts("hc:l:i:", \my %opts);
+getopts("hc:l:i:d", \my %opts);
 
 pod2usage(-verbose => 1) if $opts{h};
 pod2usage unless @ARGV;
 
 my $filename = shift @ARGV;
+
+my $debug = defined $opts{d};
 
 my @mods;
 
@@ -77,6 +79,9 @@ for (@ARGV) {
 }
 
 my $count = 0;
+
+my %dk_filter_stats;
+my $dk_filter_stats = 0;
 
 #TODO: diese globalen Variablen entfernen
 my $found;
@@ -167,6 +172,14 @@ sub print_progress {
     printf STDERR " %s (%i)",
       $mod->{shortname},
       $mod->{count};
+  }
+
+  if ($debug and $dk_filter_stats > 0) {
+    print STDERR " filter: $dk_filter_stats = ";
+    print keys %dk_filter_stats;
+    foreach my $filter (sort keys %dk_filter_stats) {
+      printf STDERR " %s (%i)", $filter, $dk_filter_stats{$filter};
+    }
   }
 
   push @time_hist, $time_cur;
@@ -261,29 +274,36 @@ sub mod_datumsformat {
   # Literatur/Weblinks/etc.-Abschnitte verbessern (auch "===")
   #   z.B. [[Alfred Philippson]]
   # {{Großes Bild}} 
+  
+  sub d {
+    my ($bool, $text) = @_;
+    $dk_filter_stats{$text}++ if !$bool;
+    return $bool;
+  }
 
   sub _check {
     my ($day, $month, $year, $before, $after) = @_;
     my ($a, $b) = ($after, $before);
+    $dk_filter_stats++;
     return (
-      $month <= 12 and  # plausibles Datum 
-      $month >= 1 and  # plausibles Datum 
-      $day <= 31 and
-      $day >= 1 and
-      $year <= 2100 and
-      $b !~ /http:\/\/\S*$/ and # link
-      $a !~ /^\s*<!--/ and # Kommentar danach
-      $b !~ /[|=]\s*$/s and # parameter oder Tabelle
-      $a !~ /^\s*\|/s and # parameter oder Tabelle
-      $a !~ /^[^\[\]]*\][^\]]+/s and # vermutlich http-link
-      $a !~ /^[^<]*<\/(ref)>/s and # small- und ref-Tag
-      $a !~ /^[^<]*\/>/ and # für <ref name="....." />
-      $b !~ /\{\{PND[^\}]*$/s and # im PND Eintrag
-      $a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|pdf) *[|\n]/i and
+      d($month <= 12, "m<=12") and  # plausibles Datum 
+      d($month >= 1, "m>=1") and  # plausibles Datum 
+      d($day <= 31, "d<=31") and
+      d($day >= 1, "d>=1") and
+      d($year <= 2100, "y<=2100") and
+      d($b !~ /http:\/\/\S*$/, "http-url") and # link
+      d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
+      d($b !~ /[|=]\s*$/s, "param1") and # parameter oder Tabelle
+      d($a !~ /^\s*\|/s, "param2")  and # parameter oder Tabelle
+      d($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
+      d($a !~ /^[^<]*<\/(ref)>/s, "ref") and # small- und ref-Tag
+      d($a !~ /^[^<]*\/>/, "refname") and # für <ref name="....." />
+      d($b !~ /\{\{PND[^\}]*$/s, "PND") and # im PND Eintrag
+      d($a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|pdf) *[|\n]/i, "filename") and
         # Zeilen/Parameter mit Bild-Endungen am Ende
-      $a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i and # nicht "freistehend"
+      d($a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i, "notalone") and # nicht "freistehend"
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
-      $b !~ /(version|kernel|linux|mac os|os x)(\]\])?[ :=]*$/i and 
+      d($b !~ /(version|kernel|linux|mac os|os x)(\]\])?[ :=]*$/i, "buzz") and 
         # Buzz-Wort
       1
     );
