@@ -352,7 +352,7 @@ sub mod_datumsformat {
     Dezember => 12, "Dez." => 12 );
 
   if ($mod->{shortname} eq "dk") {
-    while (/\b(0\d)\.\s*([\w\.]+)\s+(\d{4})(?!\d)/g) {
+    while (/\b(0\d)\.(?:\s|&nbsp;)*([\w\.]+)(?:\s|&nbsp;)+(\d{4})(?!\d)/g) {
       if (defined $monat{$2} and
           _check($1, $monat{$2}, 2000, $`, $')
       ) {
