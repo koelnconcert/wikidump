@@ -14,6 +14,12 @@ my %modules = (
     show_info => 5,
     show_contextlines => 5
   },
+  "dker" => { 
+    name => "Datumskonventionen (er)", 
+    func => \&mod_datumsformat,
+    show_info => 5,
+    show_contextlines => 5
+  },
   "dkyy" => { 
     name => "Datumskonventionen (yy)", 
     func => \&mod_datumsformat,
@@ -406,6 +412,18 @@ sub mod_datumsformat {
       ) {
         insert_found($mod, $page->title,$`,$&,$');
       }
+    }
+  }
+
+  #
+  #  20er
+  #
+  
+  if ($mod->{shortname} eq "dker") {
+    while (/(?<![\-0-9])([1-9]0er[-\ ]*Jahre)/g) {
+      if ($' !~ /^.{0,30}(Jahrhundert)/) {
+        insert_found($mod, $page->title,$`,$&,$');
+      }	
     }
   }
 
