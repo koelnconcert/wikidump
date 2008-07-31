@@ -94,6 +94,9 @@ my $found;
 my $context;
 my $info;
 
+my $secondary_flag = 0;
+my $secondary_count = 0;
+
 my $parser= Parse::MediaWikiDump::Pages->new($filename);
 
 ###########################################
@@ -118,11 +121,11 @@ while(defined($page = $parser->next)) {
   my $title = $page->title;
 
   foreach my $mod (@mods) {
-    ($found, $context, $info) = ();
+    ($found, $context, $info, $secondary_count) = ();
 
     $mod->{func}->($mod, $page) unless $page->redirect and !$mod->{redirects};
   
-    if ($found) {
+    if ($found > $secondary_count ) { # primary found
       $mod->{count}++;
       output_one($mod, $title);
     }
@@ -287,6 +290,12 @@ sub mod_datumsformat {
     return $bool;
   }
 
+  sub e {
+    my $bool = d(@_);
+    $secondary_flag = 1 if !$bool;
+    return 1;
+  }
+
   sub _check {
     my ($day, $month, $year, $before, $after) = @_;
     my ($a, $b) = ($after, $before);
@@ -301,8 +310,8 @@ sub mod_datumsformat {
       d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
       d($b !~ /[|=]\s*$/s, "param1") and # parameter oder Tabelle
       d($a !~ /^\s*\|/s, "param2")  and # parameter oder Tabelle
-      d($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
-      d($a !~ /^[^<]*<\/(ref)>/s, "ref") and # small- und ref-Tag
+      e($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
+      e($a !~ /^[^<]*<\/(ref)>/s, "ref") and # small- und ref-Tag
       d($a !~ /^[^<]*\/>/, "refname") and # für <ref name="....." />
       d($b !~ /\{\{PND[^\}]*$/s, "PND") and # im PND Eintrag
       d($a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|pdf) *[|\n]/i, "filename") and
@@ -450,8 +459,10 @@ sub insert_found {
   my($mod, $title, $before, $match, $after) = @_;
   my $show_context = $mod->{show_context};
   my $show_info = $mod->{show_info};
-  
+ 
   $found++;
+  $secondary_count++ if $secondary_flag;
+  $secondary_flag = 0;
   if ($show_context) {
     $context .= substr($before,length($before)-$show_context,$show_context)
         	      .$match.substr($after,0,$show_context)."\n";
