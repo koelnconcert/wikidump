@@ -428,9 +428,12 @@ sub mod_datumsformat {
   #  20er
   #
   
-  if ($mod->{shortname} eq "dker") {
+  if ($mod->{shortname} eq "dker" or
+#      $mod->{shortname} eq "dk" or 
+      0) {
     while (/(?<![\-0-9])([1-9]0er[-\ ]*Jahre)/g) {
-      if ($' !~ /^.{0,30}(Jahrhundert)/) {
+      if ($' !~ /^.{0,30}(Jahrhundert|Jh)/) {
+        $secondary_flag = $mod->{shortname} eq "dk";
         insert_found($mod, $page->title,$`,$&,$');
       }	
     }
