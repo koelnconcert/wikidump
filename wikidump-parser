@@ -100,6 +100,32 @@ my $secondary_count = 0;
 my $parser= Parse::MediaWikiDump::Pages->new($filename);
 
 ###########################################
+# Konstanten
+###########################################
+
+my %monat_lang = (
+  Januar => 1, "Jänner" => 1,
+  Februar => 2,
+  "März" => 3,
+  April => 4,
+  Mai => 5,
+  Juni => 6,
+  Juli => 7,
+  August => 8,
+  September => 9,
+  Oktober => 10,
+  November => 11,
+  Dezember => 12);
+
+my %monat;
+while (my ($lang, $num) = each %monat_lang) {
+  my $kurz = substr($lang,0,3);
+  $monat{$lang} = $num;
+  $monat{$kurz} = $num;
+  $monat{$kurz."."} = $num;
+}
+
+###########################################
 # Main
 ###########################################
 
@@ -372,20 +398,6 @@ sub mod_datumsformat {
   # 01. Februar 1999,  02. Apr. 2008
   #
  
-  my %monat = (
-    Januar => 1, "Jan." => 2, "Jänner" => 1, "Jän." => 1,
-    Februar => 2, "Feb." => 2,
-    "März" => 3, "Mär" => 3,
-    April => 4, "Apr." => 4,
-    Mai => 5,
-    Juni => 6, "Jun." => 6,
-    Juli => 7, "Jul." => 7,
-    August => 8, "Aug." => 8,
-    September => 9, "Sep." => 9,
-    Oktober => 10, "Okt." => 10,
-    November => 11, "Nov." => 11,
-    Dezember => 12, "Dez." => 12 );
-
   if ($mod->{shortname} eq "dk") {
     while (/\b(0\d)\.(?:\ |&nbsp;)*([\w\.]+) # Tag und Monat
             (?:\]\])? 
