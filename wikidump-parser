@@ -405,8 +405,9 @@ sub mod_datumsformat {
 	       (\d{4})(?!\d) # Jahr
 	    )? # optional
 	   /gx) {
-      if (defined $monat{$2} and
-          _check($1, $monat{$2}, 2000, $`, $')
+      my $monat = $monat{ucfirst lc $2};
+      if (defined $monat and
+          _check($1, $monat, 2000, $`, $')
       ) {
         insert_found($mod, $page->title,$`,$&,$');
       }
