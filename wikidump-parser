@@ -395,11 +395,11 @@ sub mod_datumsformat {
   }
 
   #
-  # 01. Februar 1999,  02. Apr. 2008
+  # 01. Februar 1999,  02. Apr. 2008, 03 Jan 2009
   #
  
   if ($mod->{shortname} eq "dk") {
-    while (/\b(0\d)\.(?:\ |&nbsp;)*([\w\.]+) # Tag und Monat
+    while (/\b(0\d)\.?(?:\ |&nbsp;)*([\w\.]+) # Tag und Monat
             (?:\]\])? 
 	    (?:(?:\ |&nbsp;)*(?:\[\[)? 
 	       (\d{4})(?!\d) # Jahr
