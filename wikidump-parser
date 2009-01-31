@@ -299,7 +299,6 @@ sub mod_datumsformat {
 
   s/<!--.*?-->/<!-- -->/sg; # Kommentare leeren
 
-  s/== *(Literatur|Weblinks?|Quellen?|Bibliogra(ph|f)ie)(.*?)==(.*?)(?===|\[\[Kategorie|\{\{Personendaten|$)//sg; # Abschnitte entfernen
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
 
   # todo: 
