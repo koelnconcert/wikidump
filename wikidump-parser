@@ -336,6 +336,7 @@ sub mod_datumsformat {
       d($b !~ /[|=]\s*$/s, "param1") and # parameter oder Tabelle
       d($a !~ /^\s*\|/s, "param2")  and # parameter oder Tabelle
       e($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
+      e($a !~ /^[^<]*<\/ref>/s, "ref") and # ref-tags
       d($b !~ /<ref\s*name=[^>]*$/, "refname") and # für <ref name="....." />
       d($b !~ /\{\{PND[^\}]*$/s, "PND") and # im PND Eintrag
       d($a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|pdf) *[|\n]/i, "filename") and
