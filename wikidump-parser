@@ -534,14 +534,15 @@ wikidump-parser - Parse wikipedias xml-dump
 
 =head1 SYNOPSIS
 
-wikidump-parser [-h] [-i <#>] [-l <#>] [-c <#>] <mod> <xml-dump-file>
+wikidump-parser [-h] [-i <#>] [-l <#>] [-c <#>] <xml-dump-file> <mod> [<mod> ]*
 
 =head1 ARGUMENTS
 
   dk     # Datumskonvention (1.1.2000)
-  sl     # Selbstlinks
-  grep <regexp>
-         # use the userspecitifed regexp for grep
+  dkyy   # Datumskonvention (1.1.82)
+  dkyyy  # Datumskonvention (1.1.333)
+  bkl    # diverses bei BKL-Seiten
+  red    # Redirects
 
 =head1 OPTIONS
 
