@@ -19,7 +19,7 @@ while (<DATEI>) {
 my $filtered = 1;
 
 while (<STDIN>) {
-  if (/^\* *\[\[(.*?)\]\]/) {;
+  if (/^:?\* *\[\[(.*?)\]\]/) {;
     $lemma = $1;
     $lemma =~ tr/_/ /;
     if (defined $filter{$lemma}) {
@@ -29,7 +29,7 @@ while (<STDIN>) {
       print $_;
       $filtered = 0;
     }
-  } elsif (/^\*\*<nowiki>/) {
+  } elsif (/^:?:<nowiki>/) {
     print $_ unless $filtered;
   } else {
     print $_;
