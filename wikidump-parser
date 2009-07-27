@@ -151,9 +151,9 @@ while(defined($page = $parser->next)) {
 
     $mod->{func}->($mod, $page) unless $page->redirect and !$mod->{redirects};
   
-    if ($found > $secondary_count ) { # primary found
+    if ($found > 0 ) {
       $mod->{count}++;
-      output_one($mod, $title);
+      output_one($mod, $title, $found == $secondary_count);
     }
 
   }
@@ -500,13 +500,14 @@ sub insert_simple {
 ###########################################
 sub output_one {
 ###########################################
-  my ($mod, $title) = @_;
+  my ($mod, $title, $secondary) = @_;
   my $show_context = $mod->{show_context};
   my $show_info = $mod->{show_info};
   my $show_contextlines = $mod->{show_contextlines};
   chomp $context;
   print "$mod->{shortname}: ";
-  print "*[[$title]]";
+  print ":" if $secondary;
+  print	"*[[$title]]";
   if ($info) {
     print $info;
   }
@@ -519,7 +520,8 @@ sub output_one {
   foreach my $line (split /\n/, $context) {
     if ($i++ < $show_contextlines || $show_contextlines == -1) { 
       print "$mod->{shortname}: ";
-      print "**<nowiki>$line</nowiki>\n"; 
+      print ":" if $secondary;
+      print ":<nowiki>$line</nowiki>\n"; 
     }
   }
 }
