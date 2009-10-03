@@ -10,7 +10,7 @@ binmode(DATEI, ":utf8");
 %filter;
 
 while (<DATEI>) {
-  /^\* *\[\[(.*?)\]\]/ or next;
+  /^:?\* *\[\[(.*?)\]\]/ or next;
   $lemma = $1;
   $lemma =~ tr/_/ /;
   $filter{$lemma} = $_;
