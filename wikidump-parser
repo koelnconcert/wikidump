@@ -425,7 +425,7 @@ sub mod_datumsformat {
           $' !~ /^\s*(°|%|mm|km|cm)/ and
 	  $' !~ /^\?\?/ and # 19??
 	  $' !~ /^,\d/ and
-          $' !~ /^\s*(\[\[)?((kilo|zenti|milli)?meter|(see)?meile
+          $' !~ /^(\s*|&nbsp;)(\[\[)?((kilo|zenti|milli)?meter|(see)?meile
 	         |uhr|mark|euro|prozent
 		 |jahre|tage|stunden
 		 |mann|schiffe)/ix and
