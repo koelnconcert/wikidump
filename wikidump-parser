@@ -427,7 +427,7 @@ sub mod_datumsformat {
 	  $' !~ /^,\d/ and
           $' !~ /^\s*(\[\[)?((kilo|zenti|milli)?meter|(see)?meile
 	         |uhr|mark|euro|prozent
-		 |tage|stunden
+		 |jahre|tage|stunden
 		 |mann|schiffe)/ix and
           _check($1, $monat{$2}, 2000, $`, $')
       ) {
