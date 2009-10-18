@@ -335,7 +335,7 @@ sub mod_datumsformat {
       d($day <= 31, "d<=31") and
       d($day >= 1, "d>=1") and
       d($year <= 2100, "y<=2100") and
-      d($b !~ /http:\/\/\S*$/, "http-url") and # link
+      d($b !~ /https?:\/\/\S*$/, "http-url") and # link
       d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
       d($b !~ /[|=][\s'\(]*$/s, "param1") and 
         # parameter oder Tabelle, auch geklammert, kursiv oder fett
