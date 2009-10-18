@@ -337,8 +337,10 @@ sub mod_datumsformat {
       d($year <= 2100, "y<=2100") and
       d($b !~ /http:\/\/\S*$/, "http-url") and # link
       d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
-      d($b !~ /[|=]\s*$/s, "param1") and # parameter oder Tabelle
-      d($a !~ /^\s*\|/s, "param2")  and # parameter oder Tabelle
+      d($b !~ /[|=][\s'\(]*$/s, "param1") and 
+        # parameter oder Tabelle, auch geklammert, kursiv oder fett
+      d($a !~ /^[\s'\)]*\|/s, "param2")  and
+        # parameter oder Tabelle, auch geklammert, kursiv oder fett
       e($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
       e($a !~ /^[^<]*<\/ref>/s, "ref") and # ref-tags
       d($b !~ /<ref\s*name=[^>]*$/, "refname") and # für <ref name="....." />
