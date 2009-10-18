@@ -299,7 +299,11 @@ sub mod_datumsformat {
 
   s/<!--.*?-->/<!-- -->/sg; # Kommentare leeren
 
+  s/<span[^>]*display:none[^>]*>.*?<\/span>//sg; # display:none ignorieren
+
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
+
+  s/{{(DEFAULTSORT|SORTIERUNG):.*?}}//sg;
 
   # todo: 
   # Zitat-Vorlagen
