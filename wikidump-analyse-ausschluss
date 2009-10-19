@@ -1,0 +1,95 @@
+#!/usr/bin/perl
+
+open DATEI, $ARGV[0];
+
+binmode(STDERR, ":utf8");
+binmode(STDOUT, ":utf8");
+binmode(STDIN, ":utf8");
+binmode(DATEI, ":utf8");
+
+my %ausschluss;
+
+while (<DATEI>) {
+  chomp;
+  my ($lemma, $found, $reason) =
+     /^:?\* *\[\[(.*?)\]\], ([^<]*)(?:<small>)?([^<]*)(?:<\/small>)?/ or next;
+  $lemma =~ tr/_/ /;
+  $found =~ s/ *$//;
+  $reason = "---" unless $reason;
+  $ausschluss{$lemma} = { 
+    found => $found,
+    reason => $reason
+  };
+#  print "$lemma, $data, $reason---\n";
+}
+
+my %parser;
+my $lemma;
+
+while (<STDIN>) {
+  chomp;
+  if (/^(:?)\*\[\[(.*?)\]\], (.*?) *$/) {
+    ($sec, $lemma, $found) = ($1,$2,$3);
+    $lemma =~ tr/_/ /;
+    $found =~ s/ *$//;
+    $parser{$lemma} = {
+      found => $found,
+      primary => $sec eq "",
+      context => ""
+    }
+  } elsif (($context) = /^:*<nowiki>(.*)<\/nowiki>/) {
+    $parser{$lemma}->{context} .= $context."\n";
+  }
+}
+
+my %reasons;
+foreach $val (values %ausschluss) {
+  $reasons{$val->{reason}} += 1;
+}
+
+@reasons = sort { $reasons{$b} <=> $reasons{$a} } keys %reasons;
+
+foreach $reason (@reasons) {
+  print "== $reason ($reasons{$reason}) ==\n";
+  foreach $lemma (keys %ausschluss) {
+    if ($ausschluss{$lemma}->{reason} eq $reason) {
+      print_one($lemma);
+    }
+  }
+}
+
+sub print_one {
+  my ($lemma) = @_;
+  $parser = $parser{$lemma};
+  $ausschluss = $ausschluss{$lemma};
+  print "*[[$lemma]]";
+  print " (Secondary)" if not $parser->{primary};
+  print ", $ausschluss->{reason}" if $ausschluss->{reason};
+  print "\n";
+  $found1 = $ausschluss->{found};
+  $found2 = $parser->{found};
+  if ($found1 eq $found2) {
+    print "$found1\n";
+  } else {
+    print ": < $found1\n: > $found2\n";
+  }
+  $context = $parser->{context};
+  chomp $context;
+  foreach $line (split /\n/, $context) {
+    print "::<nowiki>$line</nowiki>\n";
+  } 
+}
+
+exit;
+
+while (my ($key, $val) = each %parser) {
+  print "$key: $val->{primary}, $val->{context}";
+  print "\n---\n";
+}
+#exit;
+
+while (my ($key, $val) = each %ausschluss) {
+  print "$key: $val->{found}";
+  print "\n";
+}
+
