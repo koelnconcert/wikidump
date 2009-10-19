@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+use Getopt::Std;
+
+getopts("cd", \my %opts);
 
 open DATEI, $ARGV[0];
 
@@ -62,34 +65,25 @@ sub print_one {
   my ($lemma) = @_;
   $parser = $parser{$lemma};
   $ausschluss = $ausschluss{$lemma};
-  print "*[[$lemma]]";
-  print " (Secondary)" if not $parser->{primary};
-  print ", $ausschluss->{reason}" if $ausschluss->{reason};
-  print "\n";
   $found1 = $ausschluss->{found};
   $found2 = $parser->{found};
-  if ($found1 eq $found2) {
-    print "$found1\n";
-  } else {
-    print ": < $found1\n: > $found2\n";
+  if (not $opts{d} or $found1 ne $found2) {
+    print "*[[$lemma]]";
+    print " (Secondary)" if not $parser->{primary};
+    print ", $ausschluss->{reason}" if $ausschluss->{reason};
+    print "\n";
+    if ($found1 eq $found2) {
+      print "$found1\n";
+    } else {
+      print ": < $found1\n: > $found2\n";
+    }
+    if ($opts{c}) {
+      $context = $parser->{context};
+      chomp $context;
+      foreach $line (split /\n/, $context) {
+        print "::<nowiki>$line</nowiki>\n";
+      } 
+    }
   }
-  $context = $parser->{context};
-  chomp $context;
-  foreach $line (split /\n/, $context) {
-    print "::<nowiki>$line</nowiki>\n";
-  } 
-}
-
-exit;
-
-while (my ($key, $val) = each %parser) {
-  print "$key: $val->{primary}, $val->{context}";
-  print "\n---\n";
-}
-#exit;
-
-while (my ($key, $val) = each %ausschluss) {
-  print "$key: $val->{found}";
-  print "\n";
 }
 
