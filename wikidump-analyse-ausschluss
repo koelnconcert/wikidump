@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use Getopt::Std;
 
-getopts("cd", \my %opts);
+getopts("cdg", \my %opts);
 
 open DATEI, $ARGV[0];
 
@@ -51,15 +51,23 @@ foreach $val (values %ausschluss) {
 }
 
 @reasons = sort { $reasons{$b} <=> $reasons{$a} } keys %reasons;
+@lemmata = sort keys %ausschluss;
 
-foreach $reason (@reasons) {
-  print "== $reason ($reasons{$reason}) ==\n";
-  foreach $lemma (keys %ausschluss) {
-    if ($ausschluss{$lemma}->{reason} eq $reason) {
-      print_one($lemma);
+if ($opts{g}) {
+  foreach $reason (@reasons) {
+    print "== $reason ($reasons{$reason}) ==\n";
+    foreach $lemma (@lemmata) {
+      if ($ausschluss{$lemma}->{reason} eq $reason) {
+        print_one($lemma);
+      }
     }
   }
+} else {
+  foreach $lemma (@lemmata) {
+    print_one($lemma);
+  }
 }
+  
 
 sub print_one {
   my ($lemma) = @_;
