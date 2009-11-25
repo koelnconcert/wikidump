@@ -24,7 +24,7 @@ $buchstabe = shift @abc;
 print "=== 0-9 ===\n";
   
 while($entry = shift @sort) {
-  $entry =~ /^.*?\[\[(.*?)\]\]/;
+  $entry =~ /^.*?\[\[(.*?)\]\]/ or next;
   $name = $1;
   while ($buchstabe && $name ge $buchstabe) {
     print "\n=== $buchstabe ===\n";
