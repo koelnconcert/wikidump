@@ -353,6 +353,8 @@ sub mod_datumsformat {
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
       d($b !~ /(version|kernel|linux|mac os|os x)(\]\])?[ :=]*$/i, "buzz") and 
         # Buzz-Wort
+      d($b !~ /\W(kap(itel)?|abs(atz)?|abschnitte?|paragraph|§|lemma|satz|theorem)(\s|&nbsp;)*$/i, "gliederung") and 
+        # Gliederung
       1
     );
   }
