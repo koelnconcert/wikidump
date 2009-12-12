@@ -147,7 +147,7 @@ while(defined($page = $parser->next)) {
   my $title = $page->title;
 
   foreach my $mod (@mods) {
-    ($found, $context, $info, $secondary_count) = ();
+    ($found, $context, $info, $secondary_flag, $secondary_count) = ();
 
     $mod->{func}->($mod, $page) unless $page->redirect and !$mod->{redirects};
   
