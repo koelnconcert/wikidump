@@ -303,6 +303,8 @@ sub mod_datumsformat {
 
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
 
+  s/<source.*?<\/source>//sg; # source-Tag
+
   s/{{(DEFAULTSORT|SORTIERUNG):.*?}}//sg;
 
   # todo: 
