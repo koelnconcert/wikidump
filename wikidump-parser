@@ -328,7 +328,7 @@ sub mod_datumsformat {
   }
 
   sub _check {
-    my ($day, $month, $year, $before, $after) = @_;
+    my ($day, $month, $year, $before, $after, $no_check_param) = @_;
     my ($a, $b) = ($after, $before);
     $dk_filter_stats++;
     return (
@@ -339,10 +339,13 @@ sub mod_datumsformat {
       d($year <= 2100, "y<=2100") and
       d($b !~ /https?:\/\/\S*$/, "http-url") and # link
       d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
-      d($b !~ /[|=][\s'\(]*$/s, "param1") and 
-        # parameter oder Tabelle, auch geklammert, kursiv oder fett
-      d($a !~ /^[\s'\)]*\|/s, "param2")  and
-        # parameter oder Tabelle, auch geklammert, kursiv oder fett
+      ($no_check_param or (
+        d($b !~ /[|=][\s'\(]*$/s, "param1") and 
+         # parameter oder Tabelle, auch geklammert, kursiv oder fett
+        d($a !~ /^[\s'\)]*\|/s, "param2") and 
+          # parameter oder Tabelle, auch geklammert, kursiv oder fett
+        1
+      )) and
       e($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
       e($a !~ /^[^<]*<\/ref>/s, "ref") and # ref-tags
       d($b !~ /<ref\s*name=[^>]*$/, "refname") and # für <ref name="....." />
@@ -418,7 +421,7 @@ sub mod_datumsformat {
 	   /gx) {
       my $monat = $monat{ucfirst lc $2};
       if (defined $monat and
-          _check($1, $monat, 2000, $`, $')
+          _check($1, $monat, 2000, $`, $', "no_check_param")
       ) {
         insert_found($mod, $page->title,$`,$&,$');
       }
