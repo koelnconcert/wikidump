@@ -435,7 +435,7 @@ sub mod_datumsformat {
   if ($mod->{shortname} eq "dkyy" and ! /[vn]\. (Chr\.|u\. Z)/ 
       and ! /Römische Kaiserzeit/
   ) {
-    while (/\b(\d{1,2})\.\ *([\w\.]+)\ +(\d{2})(?![.:]?\d)/g) {
+    while (/\b(\d{1,2})\.\ *([\w\.]+)\ +'?(\d{2})(?![.:]?\d)/g) {
       if (defined $monat{$2} and
           $' !~ /^(\s*|&nbsp;)(°|%|mm|km|cm)/ and
 	  $' !~ /^\?\?/ and # 19??
