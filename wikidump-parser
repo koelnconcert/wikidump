@@ -328,7 +328,7 @@ sub mod_datumsformat {
   }
 
   sub _check {
-    my ($day, $month, $year, $before, $after, $no_check_param) = @_;
+    my ($day, $month, $year, $before, $match, $after, $no_check_param) = @_;
     my ($a, $b) = ($after, $before);
     $dk_filter_stats++;
     return (
@@ -373,7 +373,7 @@ sub mod_datumsformat {
             (?:\]\])?(?:\ |&nbsp;)*(?:\[\[)? # Verlinkungen
 	    (\d{2}(\d{2})?)(?!\.?\d) # Jahr
 	   /gx ) {
-      insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $');
+      insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $&, $');
     }
   }
   
@@ -386,7 +386,7 @@ sub mod_datumsformat {
             (?:\]\])?(?:\ |&nbsp;)*(?:\[\[)? # Verlinkungen
 	    (\d{3})(?!\.?\d) # Jahr
 	   /gx ) {
-      if (_check($1, $2, $3, $`, $') and
+      if (_check($1, $2, $3, $`, $&, $') and
           $3 ne "000"
       ) {
         insert_found($mod, $page->title,$`,$&,$');
@@ -400,7 +400,7 @@ sub mod_datumsformat {
   
   if ($mod->{shortname} eq "dk") {
     while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
-      if (_check($3, $2, $1, $`, $') and
+      if (_check($3, $2, $1, $`, $&, $') and
           $` !~ /(CAS|DIN|EN|VDE|ISO|EC).{0,9}$/ 
       ) {
         insert_found($mod, $page->title,$`,$&,$') 
@@ -421,7 +421,7 @@ sub mod_datumsformat {
 	   /gx) {
       my $monat = $monat{ucfirst lc $2};
       if (defined $monat and
-          _check($1, $monat, 2000, $`, $', "no_check_param")
+          _check($1, $monat, 2000, $`, $&, $', "no_check_param")
       ) {
         insert_found($mod, $page->title,$`,$&,$');
       }
@@ -444,7 +444,7 @@ sub mod_datumsformat {
 	         |uhr|mark|euro|prozent
 		 |jahre|tage|stunden
 		 |mann|schiffe)/ix and
-          _check($1, $monat{$2}, 2000, $`, $')
+          _check($1, $monat{$2}, 2000, $`, $&, $')
       ) {
         insert_found($mod, $page->title,$`,$&,$');
       }
