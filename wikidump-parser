@@ -329,7 +329,7 @@ sub mod_datumsformat {
 
   sub _check {
     my ($day, $month, $year, $before, $match, $after, $no_check_param) = @_;
-    my ($a, $b) = ($after, $before);
+    my ($a, $m, $b) = ($after, $match, $before);
     $dk_filter_stats++;
     return (
       d($month <= 12, "m<=12") and  # plausibles Datum 
@@ -360,6 +360,7 @@ sub mod_datumsformat {
         # Buzz-Wort
       d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem)(\s|&nbsp;)*$/i, "gliederung") and 
         # Gliederung
+      d($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/, "spezialfall") and
       1
     );
   }
