@@ -146,6 +146,8 @@ while(defined($page = $parser->next)) {
 
   my $title = $page->title;
 
+  print STDERR "=========\n$title\n" if $debug;
+
   foreach my $mod (@mods) {
     ($found, $context, $info, $secondary_flag, $secondary_count) = ();
 
@@ -191,6 +193,8 @@ sub print_progress {
       $rate / 1024 / 1024,
       $lemma_rate;
   }
+
+  print STDERR "---------\n" if $debug;
  
   printf STDERR "\r".'%2.2f%% %d:%02d',
     $byte_cur/$size*100,
@@ -209,13 +213,17 @@ sub print_progress {
       $mod->{count};
   }
 
+  print STDERR "\n" if $debug;
+  
   if ($debug and $dk_filter_stats > 0) {
     print STDERR " filter: $dk_filter_stats = ";
     print keys %dk_filter_stats;
     foreach my $filter (sort keys %dk_filter_stats) {
       printf STDERR " %s (%i)", $filter, $dk_filter_stats{$filter};
     }
+    print STDERR "\n";
   }
+
 
   push @time_hist, $time_cur;
   push @byte_hist, $byte_cur;
@@ -318,12 +326,17 @@ sub mod_datumsformat {
   sub d {
     my ($bool, $text) = @_;
     $dk_filter_stats{$text}++ if !$bool;
+    if ($debug) {
+      print STDERR "  $text\n";
+      print STDERR "    match\n" if !$bool;
+    }
     return $bool;
   }
 
   sub e {
     my $bool = d(@_);
     $secondary_flag = 1 if !$bool;
+    print STDERR "    secondary\n" if $debug and !$bool;
     return 1;
   }
 
@@ -338,12 +351,14 @@ sub mod_datumsformat {
     my ($a, $m, $b) = ($after, $match, $before);
     $dk_filter_stats++;
 
+    print STDERR "check $match\n" if $debug;
+
     return (
-      d($month <= 12, "m<=12") and  # plausibles Datum 
-      d($month >= 1, "m>=1") and  # plausibles Datum 
-      d($day <= 31, "d<=31") and
-      d($day >= 1, "d>=1") and
-      d($year <= 2100, "y<=2100") and
+      d($month <= 12, "m>12") and  # plausibles Datum 
+      d($month >= 1, "m<1") and  # plausibles Datum 
+      d($day <= 31, "d>31") and
+      d($day >= 1, "d<1") and
+      d($year <= 2100, "y>2100") and
       d($b !~ /https?:\/\/\S*$/, "http-url") and # link
       d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
       ($no_check_param or (
@@ -512,6 +527,8 @@ sub insert_found {
   } elsif ($found == $show_info + 1 && $show_info != 0) {
     $info .= ", ...";
   }
+
+  print STDERR "insert $match\n" if $debug;
 }
 
 ###########################################
