@@ -157,7 +157,7 @@ while(defined($page = $parser->next)) {
     }
 
   }
-  
+
   print_progress() if ($count % $progress_step == 0);
   #last if $count > 5000;
 }
@@ -294,7 +294,7 @@ sub mod_datumsformat {
 ###########################################
   my($mod, $page) = @_;
   return unless $page->namespace eq ''; # nur Artikel-Namensrausm
-  
+
   $_ = ${$page->text};
 
   s/<!--.*?-->/<!-- -->/sg; # Kommentare leeren
@@ -327,10 +327,17 @@ sub mod_datumsformat {
     return 1;
   }
 
+  sub vorlage_param {
+    my ($b, $vorlage, $param, $text) = @_;
+    my $re = '\{\{('.$vorlage.')(?![a-z])[^\}]*\|\s*('.$param.')\s*=[^|\}]*$';
+    return d($b !~ /$re/si, "vorlage ($vorlage) param ($param)");
+  }
+
   sub _check {
     my ($day, $month, $year, $before, $match, $after, $no_check_param) = @_;
     my ($a, $m, $b) = ($after, $match, $before);
     $dk_filter_stats++;
+
     return (
       d($month <= 12, "m<=12") and  # plausibles Datum 
       d($month >= 1, "m>=1") and  # plausibles Datum 
@@ -361,6 +368,7 @@ sub mod_datumsformat {
       d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem)(\s|&nbsp;)*$/i, "gliederung") and 
         # Gliederung
       d($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/, "spezialfall") and
+      vorlage_param($b, 'internetquelle', 'titel|titelerg') and
       1
     );
   }
