@@ -346,6 +346,12 @@ sub mod_datumsformat {
     return d($b !~ /$re/si, "vorlage ($vorlage) param ($param)");
   }
 
+  sub vorlage_param_first_unnamed {
+    my ($b, $vorlage, $param_number, $text) = @_;
+    my $re = '\{\{('.$vorlage.')(?![a-z])[^\}|]*\|[^|\}]*$';
+    return d($b !~ /$re/si, "vorlage ($vorlage) first unnamed param");
+  }
+
   sub _check {
     my ($day, $month, $year, $before, $match, $after, $no_check_param) = @_;
     my ($a, $m, $b) = ($after, $match, $before);
@@ -386,7 +392,8 @@ sub mod_datumsformat {
       vorlage_param($b, 'internetquelle', 'titel|titelerg') and
       vorlage_param($b, 'cite web', 'title') and
       vorlage_param($b, 'literatur', 'titel|titelerg|orginaltitel') and
-#      vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
+      vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
+      vorlage_param_first_unnamed($b, '("|zitat)(-\w*)?') and
       1
     );
   }
