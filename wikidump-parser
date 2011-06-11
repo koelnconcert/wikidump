@@ -599,5 +599,5 @@ wikidump-parser [-h] [-i <#>] [-l <#>] [-c <#>] <xml-dump-file> <mod> [<mod> ]*
 
   -i <#> # num. of occurences to be shown (0), -1=infty
   -l <#> # num. of context-lines to be shown (0), -1=infty;
-  -l <#> # num. of context-chars to be shown before/after occurence (30)
+  -c <#> # num. of context-chars to be shown before/after occurence (30)
   -h     # show help
