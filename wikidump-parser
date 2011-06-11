@@ -5,6 +5,7 @@ use Pod::Usage;
 use Parse::MediaWikiDump;
 use List::Util qw[min max];
 
+
 binmode(STDOUT, ":utf8");
 
 my %modules = ( 
@@ -64,6 +65,7 @@ pod2usage(-verbose => 1) if $opts{h};
 pod2usage unless @ARGV;
 
 my $filename = shift @ARGV;
+my $position_file = $filename.".position";
 
 my $debug = defined $opts{d};
 
@@ -84,7 +86,7 @@ for (@ARGV) {
   $mod->{count} = 0; # found-counter
 }
 
-my $count = 0;
+my $count = -1;
 
 my %dk_filter_stats;
 my $dk_filter_stats = 0;
@@ -141,8 +143,20 @@ for (my $i = 0; $i < $time_hist_length; $i++) {
 }
 my $progress_step = 100; # in Artikeln
 
+my $old_position = load_position();
+print STDERR "seeking to last position ($old_position)\n" if $old_position > 0;
+
 while(defined($page = $parser->next)) {
   $count++;
+  #last if $count > 5000;
+
+  print_progress() if ($count % $progress_step == 0);
+
+  next if $count < $old_position;
+  if ($count == $old_position) {
+    print STDERR "\nstarting at position $count\n";
+    register_quit_hook();
+  }
 
   my $title = $page->title;
 
@@ -160,12 +174,44 @@ while(defined($page = $parser->next)) {
 
   }
 
-  print_progress() if ($count % $progress_step == 0);
-  #last if $count > 5000;
 }
 
 print_progress();
 print STDERR "\n";
+
+###########################################
+sub register_quit_hook {
+###########################################
+  $SIG{INT} = \&quit;
+  $SIG{KILL} = \&quit;
+  $SIG{TERM} = \&quit;
+  $SIG{QUIT} = \&quit;
+}
+
+###########################################
+sub quit {
+###########################################
+  save_position();
+  die "\nquit; position ($count) saved";
+}
+
+###########################################
+sub load_position {
+###########################################
+  return 0 unless -e $position_file;
+  open FILE, $position_file or die $!;
+  my $pos = <FILE>;
+  close FILE;
+  return $pos;
+}
+
+###########################################
+sub save_position {
+###########################################
+  open FILE, ">", $position_file or die $!;
+  print FILE $count;
+  close FILE;
+}
 
 ###########################################
 sub print_progress {
