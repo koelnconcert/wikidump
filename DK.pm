@@ -95,7 +95,7 @@ sub mod_datumsformat {
 
   sub vorlage_param_first_unnamed {
     my ($b, $vorlage, $param_number, $text) = @_;
-    my $re = '\{\{('.$vorlage.')(?![a-z])[^\}|]*\|[^|\}]*$';
+    my $re = '\{\{('.$vorlage.')(?![a-z])[^\}|]*\|[^|=\}]*$';
     return d($b !~ /$re/si, "vorlage ($vorlage) first unnamed param");
   }
 

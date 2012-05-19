@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 171;
+use Test::More tests => 173;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -157,7 +157,7 @@ sub test_ref {
   secfound("01.01.2000 </ref>", "01.01.2000");
   found("01.01.2000<ref>foobar</ref>", "01.01.2000");
 
-  notfound("<ref name='01.01.2000'>");
+  notfound("<ref name='foo 01.01.2000 bar'>");
   found("<ref name='foobar'>01.01.2000", "01.01.2000");
 }
 
@@ -219,7 +219,8 @@ sub test_special_params {
   notfound('{{"|text=foo 1.1.2000 bar}}');
   notfound('{{"|foo 1.1.2000 bar}}');
   notfound('{{"-fr|text=foo 1.1.2000 bar}}');
-
+  notfound('DOI=foo_1.1.2000_bar}');
+  found('DOI=foo_1.1.2000_bar}2.2.2002', "2.2.2002");
 }
 
 sub test_special {
