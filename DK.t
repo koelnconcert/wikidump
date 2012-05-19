@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More;
+use Test::More tests => 171;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -10,18 +10,6 @@ use Class::Inspector;
 my $mod = {
   shortname => "dk"
 };
-
-sub run_tests() {
-  my $methods = Class::Inspector->methods("main", "expanded");
-  for my $method (@$methods) {
-    my (undef, undef, $name, $sub) = @$method;
-	if ($name =~ /^test_/) {
-	  note $name;
-	  &$sub();
-	}
-  }
-  done_testing();
-}
 
 #
 # Tests
@@ -53,7 +41,7 @@ sub test_iso {
   #TODO [2000]-01-01 ?
 
   notfound("2000-01-01-");
-  notfound("-2000-01-01");
+ notfound("-2000-01-01");
 }
 
 sub test_iso_context {
@@ -238,15 +226,16 @@ sub test_special {
   notfound("Gemeinden 1994 und ihre Veränderungen seit 01.01.1948 in den neuen Ländern");
   found("Gemeinden FOOBAR und ihre Veränderungen seit 01.01.1948 in FOOBAR", "01.01.1948");
 
-# TODO: bug: 'and' instead of 'or'
-#  found("Gemeinden FOOBAR und ihre Veränderungen seit 01.01.1948 in den neuen Ländern", "01.01.1948");
-#  found("Gemeinden 1994 und ihre Veränderungen seit 01.01.1948 in FOOBAR", "01.01.1948");
+  TODO : {
+    local $TODO = "bug: 'and' instead of 'or'";
+    found("Gemeinden FOOBAR und ihre Veränderungen seit 01.01.1948 in den neuen Ländern", "01.01.1948");
+    found("Gemeinden 1994 und ihre Veränderungen seit 01.01.1948 in FOOBAR", "01.01.1948");
+  }
 }
 
 sub test_other {
   notfound("1.1.2000 <!-- comment (mostly 'sic!') -->");
   found("1.1.2000 foobar <!-- comment -->", "1.1.2000");
-
 }
 
 #
@@ -280,6 +269,18 @@ sub notfound {
   my @founds = DK::check($mod, $page);
   my $ok = scalar @founds == 0;
   ok($ok, "! " . $match) or diag("unexspected match in '$match'\n" . Dumper \@founds);
+}
+
+sub run_tests() {
+  my $methods = Class::Inspector->methods("main", "expanded");
+  for my $method (@$methods) {
+    my (undef, undef, $name, $sub) = @$method;
+	if ($name =~ /^test_/) {
+	  note $name;
+	  &$sub();
+	}
+  }
+  done_testing();
 }
 
 run_tests();
