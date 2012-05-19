@@ -138,7 +138,7 @@ sub mod_datumsformat {
       d($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/, "spezialfall") and
       vorlage_param($b, 'internetquelle', 'titel|titelerg') and
       vorlage_param($b, 'cite web', 'title') and
-      vorlage_param($b, 'literatur', 'titel|titelerg|orginaltitel') and
+      vorlage_param($b, 'literatur', 'titel|titelerg|originaltitel') and
       vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
       vorlage_param_first_unnamed($b, '("|zitat)(-\w*)?') and
       1

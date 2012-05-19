@@ -223,8 +223,7 @@ sub test_special_params {
   notfound("{{cite web|title=foo 1.1.2000 bar}}");
   notfound("{{literatur|titel=foo 1.1.2000 bar}}");
   notfound("{{literatur|titelerg=foo 1.1.2000 bar}}");
-  notfound("{{literatur|orginaltitel=foo 1.1.2000 bar}}");
-  #TODO bug typo or_i_ginaltitel
+  notfound("{{literatur|originaltitel=foo 1.1.2000 bar}}");
   notfound("{{zitat-de|text=foo 1.1.2000 bar}}");
   notfound("{{zitat|text=foo 1.1.2000 bar}}");
   notfound("{{zitat|foo 1.1.2000 bar}}");
