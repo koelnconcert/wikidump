@@ -47,7 +47,7 @@ while (my ($lang, $num) = each %monat_lang) {
 ###########################################
 sub mod_datumsformat {
 ###########################################
-  my($mod, $page) = @_;
+  my($page, $mod) = (@_, "dk");
   return unless $page->namespace eq ''; # nur Artikel-Namensrausm
 
   $_ = ${$page->text};
@@ -88,13 +88,13 @@ sub mod_datumsformat {
   }
 
   sub vorlage_param {
-    my ($b, $vorlage, $param, $text) = @_;
+    my ($b, $vorlage, $param) = @_;
     my $re = '\{\{('.$vorlage.')(?![a-z])[^\}]*\|\s*('.$param.')\s*=[^|\}]*$';
     return d($b !~ /$re/si, "vorlage ($vorlage) param ($param)");
   }
 
   sub vorlage_param_first_unnamed {
-    my ($b, $vorlage, $param_number, $text) = @_;
+    my ($b, $vorlage) = @_;
     my $re = '\{\{('.$vorlage.')(?![a-z])[^\}|]*\|[^|=\}]*$';
     return d($b !~ /$re/si, "vorlage ($vorlage) first unnamed param");
   }
@@ -135,7 +135,7 @@ sub mod_datumsformat {
         # Buzz-Wort
       d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem)(\s|&nbsp;)*$/i, "gliederung") and 
         # Gliederung
-      d($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/, "spezialfall") and
+      d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "spezialfall") and # condition in parenthesis required, others use of unitializied value in d()
       vorlage_param($b, 'internetquelle', 'titel|titelerg') and
       vorlage_param($b, 'cite web', 'title') and
       vorlage_param($b, 'literatur', 'titel|titelerg|originaltitel') and
@@ -149,12 +149,12 @@ sub mod_datumsformat {
   # 1.2.1999, 01.02.99
   #
 
-  if ($mod->{shortname} eq "dk") {
+  if ($mod eq "dk") {
     while (/(?<![.0-9])(\d{1,2})\.(?:\ |&nbsp;)*(\d{1,2})\. # Tag und Monat
             (?:\]\])?(?:\ |&nbsp;)*(?:\[\[)? # Verlinkungen
 	    (\d{2}(\d{2})?)(?!\.?\d) # Jahr
 	   /gx ) {
-      insert_found($mod, $page->title,$`,$&,$') if _check($1, $2, $3, $`, $&, $');
+      insert_found($`,$&,$') if _check($1, $2, $3, $`, $&, $');
     }
   }
   
@@ -162,7 +162,7 @@ sub mod_datumsformat {
   # 1.02.799
   #
 
-  if ($mod->{shortname} eq "dkyyy") {
+  if ($mod eq "dkyyy") {
     while (/(?<![.0-9])(\d{1,2})\.(?:\ |&nbsp;)*(\d{1,2})\. # Tag und Monat
             (?:\]\])?(?:\ |&nbsp;)*(?:\[\[)? # Verlinkungen
 	    (\d{3})(?!\.?\d) # Jahr
@@ -170,7 +170,7 @@ sub mod_datumsformat {
       if (_check($1, $2, $3, $`, $&, $') and
           $3 ne "000"
       ) {
-        insert_found($mod, $page->title,$`,$&,$');
+        insert_found($`,$&,$');
       }	
     }
   }
@@ -179,12 +179,12 @@ sub mod_datumsformat {
   # 1999-2-1, 1999-02-01
   #
   
-  if ($mod->{shortname} eq "dk") {
+  if ($mod eq "dk") {
     while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
       if (_check($3, $2, $1, $`, $&, $') and
           $` !~ /(CAS|DIN|EN|VDE|ISO|EC).{0,9}$/ 
       ) {
-        insert_found($mod, $page->title,$`,$&,$') 
+        insert_found($`,$&,$') 
       }
     }
   }
@@ -193,7 +193,7 @@ sub mod_datumsformat {
   # 01. Februar 1999,  02. Apr. 2008, 03 Jan 2009
   #
  
-  if ($mod->{shortname} eq "dk") {
+  if ($mod eq "dk") {
     while (/\b(0\d)\.?(?:\ |&nbsp;)*([\w\.]+) # Tag und Monat
             (?:\]\])? 
 	    (?:(?:\ |&nbsp;)*(?:\[\[)? 
@@ -204,7 +204,7 @@ sub mod_datumsformat {
       if (defined $monat and
           _check($1, $monat, 2000, $`, $&, $', "no_check_param")
       ) {
-        insert_found($mod, $page->title,$`,$&,$');
+        insert_found($`,$&,$');
       }
     }
   }
@@ -213,7 +213,7 @@ sub mod_datumsformat {
   # 1. Januar 38
   #
 
-  if ($mod->{shortname} eq "dkyy" and ! /[vn]\. (Chr\.|u\. Z)/ 
+  if ($mod eq "dkyy" and ! /[vn]\. (Chr\.|u\. Z)/ 
       and ! /Römische Kaiserzeit/
   ) {
     while (/\b(\d{1,2})\.\ *([\w\.]+)\ +'?(\d{2})(?![.:]?\d)/g) {
@@ -227,7 +227,7 @@ sub mod_datumsformat {
 		 |mann|schiffe)/ix and
           _check($1, $monat{$2}, 2000, $`, $&, $')
       ) {
-        insert_found($mod, $page->title,$`,$&,$');
+        insert_found($`,$&,$');
       }
     }
   }
@@ -236,13 +236,13 @@ sub mod_datumsformat {
   #  20er
   #
   
-  if ($mod->{shortname} eq "dker" or
-#      $mod->{shortname} eq "dk" or 
+  if ($mod eq "dker" or
+#      $mod eq "dk" or 
       0) {
     while (/(?<![\-0-9])([1-9]0er[-\ ]*Jahre)/g) {
       if ($' !~ /^.{0,30}(Jahrhundert|Jh)/) {
-        $secondary_flag = $mod->{shortname} eq "dk";
-        insert_found($mod, $page->title,$`,$&,$');
+        $secondary_flag = $mod eq "dk";
+        insert_found($`,$&,$');
       }	
     }
   }
@@ -252,7 +252,7 @@ sub mod_datumsformat {
 ###########################################
 sub insert_found {
 ###########################################
-  my($mod, $title, $before, $match, $after) = @_;
+  my($before, $match, $after) = @_;
   push @founds, {
     before => $before,
     match => $match,

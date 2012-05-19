@@ -323,7 +323,7 @@ sub mod_datumsformat {
 ###########################################
   my($mod, $page) = @_;
 
-  my @founds = DK::check($mod, $page);
+  my @founds = DK::check($page, $mod->{shortname});
   for my $found (@founds) {
     $secondary_flag = $found->{secondary_flag};
     insert_found($mod, $page->title, $found->{before}, $found->{match}, $found->{after});

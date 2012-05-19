@@ -7,10 +7,6 @@ use MockWikiPage;
 use Data::Dumper;
 use Class::Inspector;
 
-my $mod = {
-  shortname => "dk"
-};
-
 #
 # Tests
 #
@@ -125,11 +121,11 @@ sub test_namespace {
   my @founds;
   
   $page->{namespace} = "";
-  @founds = DK::check($mod, $page);
+  @founds = DK::check($page);
   ok(scalar @founds == 1, "article namespace");
 
   $page->{namespace} = "WP";
-  @founds = DK::check($mod, $page);
+  @founds = DK::check($page);
   ok(scalar @founds == 0, "other namespace");
 }
 
@@ -252,7 +248,7 @@ sub found {
   $match = $match || $context;
   $secondary = $secondary || 0;
   my $page = MockWikiPage->new($context);
-  my @founds = DK::check($mod, $page);
+  my @founds = DK::check($page);
   my $ok = scalar @founds == 1
 	  && $founds[0]->{match} eq $match
 	  && $founds[0]->{secondary_flag} eq $secondary;
@@ -267,7 +263,7 @@ sub found {
 sub notfound {
   my ($match) = @_;
   my $page = MockWikiPage->new($match);
-  my @founds = DK::check($mod, $page);
+  my @founds = DK::check($page);
   my $ok = scalar @founds == 0;
   ok($ok, "! " . $match) or diag("unexspected match in '$match'\n" . Dumper \@founds);
 }
