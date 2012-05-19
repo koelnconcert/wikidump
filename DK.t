@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 use strict;
-use feature qw(say);
 use utf8;
 use Test::More;
 use DK;
@@ -17,9 +16,8 @@ sub run_tests() {
   for my $method (@$methods) {
     my (undef, undef, $name, $sub) = @$method;
 	if ($name =~ /^test_/) {
-	  say $name;
+	  note $name;
 	  &$sub();
-      say "";
 	}
   }
   done_testing();
@@ -234,7 +232,7 @@ sub test_special_params {
   notfound('{{"|text=foo 1.1.2000 bar}}');
   notfound('{{"|foo 1.1.2000 bar}}');
   notfound('{{"-fr|text=foo 1.1.2000 bar}}');
-  
+
 }
 
 sub test_special {
@@ -271,13 +269,10 @@ sub found {
 	  && $founds[0]->{secondary_flag} eq $secondary;
   
   my $flag = $secondary ? "2" : "=";
-  ok($ok, "$flag $context");
-  if (!$ok) {
-    my $msg="failed finding '$match' in '$context'";
-    $msg .= " as secondary" if $secondary;
-    say $msg;
-    say Dumper \@founds;
-  }
+  my $msg="finding '$match' in '$context'";
+  $msg .= " as secondary" if $secondary ;
+
+  ok($ok, "$flag $context") or diag("failed $msg \n" . Dumper \@founds);
 }
 
 sub notfound {
@@ -285,11 +280,7 @@ sub notfound {
   my $page = MockWikiPage->new($match);
   my @founds = DK::check($mod, $page);
   my $ok = scalar @founds == 0;
-  ok($ok, "! " . $match);
-  if (!$ok) {
-    say "unexspected match in '$match'";
-    say Dumper \@founds;
-  }
+  ok($ok, "! " . $match) or diag("unexspected match in '$match'\n" . Dumper \@founds);
 }
 
 run_tests();
