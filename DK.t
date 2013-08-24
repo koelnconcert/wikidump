@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 173;
+use Test::More tests => 174;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -217,6 +217,7 @@ sub test_special_params {
   notfound('{{"-fr|text=foo 1.1.2000 bar}}');
   notfound('DOI=foo_1.1.2000_bar}');
   found('DOI=foo_1.1.2000_bar}2.2.2002', "2.2.2002");
+  notfound('{{Weblink ohne Linktext|Hinweis=Kein Zugriff am 2013-06-09 13:19}}');
 }
 
 sub test_special {
