@@ -1,2 +1,2 @@
 language: perl
-script: ./test
+script: perl test
