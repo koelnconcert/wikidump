@@ -1,2 +1,3 @@
 language: perl
+install: true
 script: perl test
