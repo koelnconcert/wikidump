@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 184;
+use Test::More tests => 185;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -194,6 +194,8 @@ sub test_chapter {
   notfound(", KaPITel 1.1.99");
   notfound(", kapitel&nbsp;1.1.99");
   # TODO get rid of \W in regexp
+
+  notfound(" System-Nr. ''01.01.01"); 
 }
 
 sub test_notalone {
