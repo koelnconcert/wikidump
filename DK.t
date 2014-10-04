@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 181;
+use Test::More tests => 182;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -226,6 +226,7 @@ sub test_special_params {
   notfound('{{BAnz|AT 10.03.2014 B3}}');
   notfound('{{Wikisource|Artikel 01.01.2000 foo|Text|lang=de}}');
   found('{{Wikisource|Artikel|Text 01.01.2000 foo|lang=de}}', "01.01.2000");
+  notfound('[[doi:10.5072/foo-01.01.2000]]');
 }
 
 sub test_special {

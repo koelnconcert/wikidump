@@ -127,6 +127,7 @@ sub mod_datumsformat {
       d($b !~ /\{\{PND[^\}]*$/s, "PND") and # im PND Eintrag
       d($b !~ /\{\{DOI[^\}]*$/s, "DOI-vorlage") and # im PND Eintrag
       d($b !~ /DOI=[^ \}\|]*$/s, "DOI-param") and # im PND Eintrag
+      d($b !~ /\[\[doi:[^\]\|]*$/is, "DOI-link") and # im PND Eintrag
       d($a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|ogv|pdf) *[|\n\]]/i, "filename") and
         # Zeilen/Parameter mit Bild-Endungen am Ende
       d($a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i, "notalone") and # nicht "freistehend"
