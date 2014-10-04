@@ -123,7 +123,7 @@ sub mod_datumsformat {
       )) and
       e($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
       e($a !~ /^[^<]*<\/ref>/s, "ref") and # ref-tags
-      d($b !~ /<ref\s*name=[^>]*$/, "refname") and # für <ref name="....." />
+      d($b !~ /<ref\s+[^>]*$/i, "refparam") and # für <ref name="....." />
       d($b !~ /\{\{PND[^\}]*$/s, "PND") and # im PND Eintrag
       d($b !~ /\{\{DOI[^\}]*$/s, "DOI-vorlage") and # im PND Eintrag
       d($b !~ /DOI=[^ \}\|]*$/s, "DOI-param") and # im PND Eintrag
