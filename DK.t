@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 175;
+use Test::More tests => 176;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -219,6 +219,7 @@ sub test_special_params {
   found('DOI=foo_1.1.2000_bar}2.2.2002', "2.2.2002");
   notfound('{{Weblink ohne Linktext|Hinweis=Kein Zugriff am 2013-06-09 13:19}}');
   notfound('{{Salzburger Nachrichten|ks250800_25.01.2013_41-44836397}}');
+  notfound('{{BAnz|AT 10.03.2014 B3}}');
 }
 
 sub test_special {
