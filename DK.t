@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 182;
+use Test::More tests => 183;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -227,6 +227,7 @@ sub test_special_params {
   notfound('{{Wikisource|Artikel 01.01.2000 foo|Text|lang=de}}');
   found('{{Wikisource|Artikel|Text 01.01.2000 foo|lang=de}}', "01.01.2000");
   notfound('[[doi:10.5072/foo-01.01.2000]]');
+  notfound('{{Infobox Fluss| PEGEL1=Pfaffenhofen/14.9/505/1.10/11.02.1932/2.48/4.49/29.0/74.6/14.04.1994');
 }
 
 sub test_special {

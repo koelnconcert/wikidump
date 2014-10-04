@@ -142,6 +142,7 @@ sub mod_datumsformat {
       vorlage_param($b, 'weblink ohne linktext', 'hinweis') and
       vorlage_param($b, 'literatur', 'titel|titelerg|originaltitel') and
       vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
+      vorlage_param($b, 'infobox fluss', 'pegel.*') and
       vorlage_param_first_unnamed($b, '("|zitat)(-\w*)?') and
       vorlage_param_first_unnamed($b, 'salzburger nachrichten') and
       vorlage_param_first_unnamed($b, 'banz') and
