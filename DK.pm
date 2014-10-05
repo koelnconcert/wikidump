@@ -132,7 +132,7 @@ sub mod_datumsformat {
         # Zeilen/Parameter mit Bild-Endungen am Ende
       d($a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i, "notalone") and # nicht "freistehend"
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
-      d($b !~ /(version|kernel|linux|mac os|os x)(\]\])?[ :=]*$/i, "buzz") and 
+      d($b !~ /(version|kernel|linux|release|mac os|os x)(\]\])?[ :=]*$/i, "buzz") and 
         # Buzz-Wort
       d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.)(\s|&nbsp;)*'*$/i, "systematik") and 
         # Systematik

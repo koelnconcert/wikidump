@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 186;
+use Test::More tests => 188;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -176,7 +176,7 @@ sub test_files_at_end_of_line_or_parameter {
 }
 
 sub test_software_version {
-  my @words = (qw(version kernel linux), "mac os", "os x");
+  my @words = (qw(version kernel linux release), "mac os", "os x");
   
   for my $word (@words) {
     notfound("$word 2000-01-01");
