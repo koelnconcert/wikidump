@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 189;
+use Test::More tests => 190;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -187,7 +187,7 @@ sub test_software_version {
 }
 
 sub test_chapter {
-  my @words = qw(kap. kapitel abs. absatz abschnitt abschnitte paragraph § lemma satz theorem);
+  my @words = qw(kap. kapitel abs. absatz abschnitt abschnitte paragraph § lemma satz theorem tagesordnungspunkt);
 
   for my $word (@words) {
     notfound(", $word 1.1.99");

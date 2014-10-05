@@ -134,7 +134,7 @@ sub mod_datumsformat {
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
       d($b !~ /(version|kernel|linux|release|mac os|os x)(\]\])?[ :=\-]*$/i, "buzz") and 
         # Buzz-Wort
-      d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.)(\s|&nbsp;)*'*$/i, "systematik") and 
+      d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.|tagesordnungspunkt)(\s|&nbsp;)*'*$/i, "systematik") and 
         # Systematik
       d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "spezialfall") and # condition in parenthesis required, others use of unitializied value in d()
       vorlage_param($b, 'internetquelle', 'titel|titelerg') and
