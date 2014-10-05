@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 188;
+use Test::More tests => 189;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -183,6 +183,7 @@ sub test_software_version {
     notfound("$word]]: 2000-01-01");
   }
   found("foobar: 2000-01-01", "2000-01-01");
+  notfound("s3c-linux-2.6.21 foo");
 }
 
 sub test_chapter {
