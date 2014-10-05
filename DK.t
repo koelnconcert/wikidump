@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 190;
+use Test::More tests => 191;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -232,6 +232,7 @@ sub test_special_params {
   notfound('[[doi:10.5072/foo-01.01.2000]]');
   notfound('{{Infobox Fluss| PEGEL1=Pfaffenhofen/14.9/505/1.10/11.02.1932/2.48/4.49/29.0/74.6/14.04.1994');
   notfound('{{SortKey|!2000-01-01}}');
+  notfound("{{Infobox Chemikalie|CAS=foobar viel Text \n * 2000-01-01 <small>Name</small>");
 }
 
 sub test_special {
