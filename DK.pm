@@ -121,6 +121,7 @@ sub mod_datumsformat {
           # parameter oder Tabelle, auch geklammert, kursiv oder fett
         1
       )) and
+      d($b !~ /\[\[[^\]\|]*$/, "wikilink") and
       e($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
       e($a !~ /^[^<]*<\/ref>/s, "ref") and # ref-tags
       d($b !~ /<ref\s+[^>]*$/i, "refparam") and # für <ref name="....." />

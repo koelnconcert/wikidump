@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 192;
+use Test::More tests => 197;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -127,6 +127,14 @@ sub test_namespace {
   $page->{namespace} = "WP";
   @founds = DK::check($page);
   ok(scalar @founds == 0, "other namespace");
+}
+
+sub test_wikilink {
+    notfound("[[Foobar am 1.1.2000]]");
+    found("[[Foobar am 1.1.2000]] 2.2.2002", "2.2.2002");
+    notfound("[[:en:Foo am 1.1.2000 bar]]");
+    notfound("[[Foobar#1.1.2000]]");
+    found("[[Foobar am 1.1.2000|foo 2.2.2002]]", "2.2.2002");
 }
 
 sub test_url {
