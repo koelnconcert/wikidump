@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 191;
+use Test::More tests => 192;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -209,6 +209,7 @@ sub test_notalone {
 sub test_special_params {
   notfound("{{internetquelle|titel=foo 1.1.2000 bar}}");
   notfound("{{internetquelle|titelerg=foo 1.1.2000 bar}}");
+  notfound("{{Internetquelle|zitat= foo 1.1.2000 bar}}");
   found("{{internetquelle|comment=foo 1.1.2000 bar}}", "1.1.2000");
   found("{{internetquelle|foo 1.1.2000 bar}}", "1.1.2000");
   notfound("{{cite web|title=foo 1.1.2000 bar}}");
