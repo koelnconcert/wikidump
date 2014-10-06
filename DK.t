@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 197;
+use Test::More tests => 198;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -135,6 +135,7 @@ sub test_wikilink {
     notfound("[[:en:Foo am 1.1.2000 bar]]");
     notfound("[[Foobar#1.1.2000]]");
     found("[[Foobar am 1.1.2000|foo 2.2.2002]]", "2.2.2002");
+    found("[[01. Januar]] [[2000]]", "01. Januar]] [[2000");
 }
 
 sub test_url {
