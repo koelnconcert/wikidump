@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 200;
+use Test::More tests => 201;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -245,6 +245,7 @@ sub test_special_params {
   notfound("{{Infobox Chemikalie|CAS=foobar viel Text \n * 2000-01-01 <small>Name</small>");
   notfound("{{cite journal|doi=10.5072/foobar/01.01.2000|title=Title 2000-01-01}}");
   notfound("{{doi|10.5072/foo/01.01.2000}}");
+  notfound("{{Infobox Burg |Bild = Foo 2013-01-21 42.JPG}}");
 }
 
 sub test_special {
