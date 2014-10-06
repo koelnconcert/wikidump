@@ -140,6 +140,7 @@ sub mod_datumsformat {
       d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "spezialfall") and # condition in parenthesis required, others use of unitializied value in d()
       vorlage_param($b, 'internetquelle', 'titel|titelerg|zitat') and
       vorlage_param($b, 'cite web', 'title') and
+      vorlage_param($b, 'cite journal', 'title|doi') and
       vorlage_param($b, 'weblink ohne linktext', 'hinweis') and
       vorlage_param($b, 'literatur', 'titel|titelerg|originaltitel') and
       vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
@@ -150,6 +151,7 @@ sub mod_datumsformat {
       vorlage_param_first_unnamed($b, 'salzburger nachrichten') and
       vorlage_param_first_unnamed($b, 'banz') and
       vorlage_param_first_unnamed($b, 'wikisource') and
+      vorlage_param_first_unnamed($b, 'doi') and
       1
     );
   }
