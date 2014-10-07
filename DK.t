@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 202;
+use Test::More tests => 203;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -206,6 +206,7 @@ sub test_chapter {
   # TODO get rid of \W in regexp
 
   notfound(" System-Nr. ''01.01.01"); 
+  notfound("in der unbenannten Gruppe ''25.01.04'' zu finden");
 }
 
 sub test_notalone {
