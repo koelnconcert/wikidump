@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 208;
+use Test::More tests => 209;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -144,6 +144,7 @@ sub test_url {
   notfound("https://example.com/2000-01-01");
   found("http://example.com/ 2000-01-01", "2000-01-01");
   found("example.com/2000-01-01", "2000-01-01");
+  notfound("[//example.com/2000-01-01");
 
   secfound("2000-01-01 (http-label)] foobar", "2000-01-01");
   found("2000-01-01 (non-http-label)]] foobar", "2000-01-01");
