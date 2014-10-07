@@ -143,6 +143,7 @@ sub mod_datumsformat {
       d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.|gruppe|tagesordnungspunkt)(\s|&nbsp;)*'*$/i, "systematik") and 
         # Systematik
       d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "spezialfall") and # condition in parenthesis required, others use of unitializied value in d()
+      d($b !~ /data-sort-value *= *["']$/, "data-sort-value") and
       vorlage_param($b, 'internetquelle', 'titel|titelerg|zitat') and
       vorlage_param($b, 'cite [a-z ]*', 'title') and
       vorlage_param($b, 'weblink ohne linktext', 'hinweis') and
