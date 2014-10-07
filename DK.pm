@@ -134,7 +134,7 @@ sub mod_datumsformat {
       d($b !~ /\{\{DOI[^\}]*$/s, "DOI-vorlage") and # im PND Eintrag
       d($b !~ /DOI=[^ \}\|]*$/s, "DOI-param") and # im PND Eintrag
       d($b !~ /\[\[doi:[^\]\|]*$/is, "DOI-link") and # im PND Eintrag
-      d($a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|ogv|pdf|webm) *[|\n\]]/i, "filename") and
+      d($a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|ogv|pdf|webm|tif) *[|\n\]]/i, "filename") and
         # Zeilen/Parameter mit Bild-Endungen am Ende
       d($a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i, "notalone") and # nicht "freistehend"
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
@@ -151,7 +151,7 @@ sub mod_datumsformat {
       vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
       vorlage_param($b, 'infobox fluss', 'pegel[0-9]') and
       vorlage_param($b, 'infobox chemikalie', 'cas') and
-      vorlage_param($b, '[a-z ]*', 'bild|doi') and
+      vorlage_param($b, '[a-z ]*', 'bild|datei|doi') and
       vorlage_param_first_unnamed($b, '("|zitat)(-\w*)?') and
       vorlage_param_first_unnamed($b, 'sortkey') and
       vorlage_param_first_unnamed($b, 'salzburger nachrichten') and

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 206;
+use Test::More tests => 208;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -172,7 +172,7 @@ sub test_ref {
 }
 
 sub test_files_at_end_of_line_or_parameter {
-  my @exts = qw(jpeg jpg gif svg png ogg ogv pdf webm);
+  my @exts = qw(jpeg jpg gif svg png ogg ogv pdf webm tif);
 
   notfound("2000-01-01.$_|") for @exts;
 
@@ -253,6 +253,7 @@ sub test_special_params {
   notfound("{{doi|10.5072/foo/01.01.2000}}");
   notfound("{{Infobox Burg |Bild = Foo 2013-01-21 42.JPG}}");
   notfound('data-sort-value="1966-01-15"');
+  notfound('{{foo|datei=foo 2000-01-01}}');
 }
 
 sub test_special {
