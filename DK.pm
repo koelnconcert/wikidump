@@ -62,6 +62,10 @@ sub mod_datumsformat {
 
   s/{{(DEFAULTSORT|SORTIERUNG):.*?}}//sg;
 
+  # hack: GeoQuelle kommt innerhalb von Vorlage:Infobox Fluss vor
+  # und verhindert das Ignorieren von späteren Parametern
+  s/{{GeoQuelle\|.*?}}//isg; 
+
   # todo: 
   # Zitat-Vorlagen
   # "vermutlich http-link" überprüfen
