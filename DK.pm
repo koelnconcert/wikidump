@@ -198,7 +198,7 @@ sub mod_datumsformat {
   if ($mod eq "dk") {
     while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
       if (_check($3, $2, $1, $`, $&, $') and
-          $` !~ /(CAS|DIN|EN|VDE|ISO|EC)(&nbsp;)?.{0,9}$/ 
+          $` !~ /(CAS|DIN|EN|VDE|ISO|EC|ÖNORM)(&nbsp;)?.{0,9}$/ 
       ) {
         insert_found($`,$&,$') 
       }

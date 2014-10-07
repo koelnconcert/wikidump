@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 204;
+use Test::More tests => 205;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -49,7 +49,7 @@ sub test_iso_context {
   notfound("EN 2000-01-01");
   notfound("EC 2000-01-01");
   notfound("EN&nbsp;60204-1:2007-08-01");
-
+  notfound("ÖNORM A 8010:2010-07-15");
   found("iso 2000-01-01", "2000-01-01");
 
   notfound("ISO 9_chars 2000-01-01");
