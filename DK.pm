@@ -148,7 +148,7 @@ sub mod_datumsformat {
       vorlage_param($b, 'internetquelle', 'titel|titelerg|zitat') and
       vorlage_param($b, 'cite [a-z ]*', 'title') and
       vorlage_param($b, 'weblink ohne linktext', 'hinweis') and
-      vorlage_param($b, 'literatur', 'titel|titelerg|originaltitel') and
+      vorlage_param($b, 'literatur', 'titel|titelerg|originaltitel|sammelwerk|werkerg') and
       vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
       vorlage_param($b, 'infobox fluss', 'pegel[0-9]') and
       vorlage_param($b, 'infobox chemikalie', 'cas') and
