@@ -1,36 +1,35 @@
 #!/usr/bin/perl
-
-use locale;
-use POSIX qw(locale_h);
-setlocale(LC_ALL, "de_DE.utf8");
+use feature qw/say/;
+use Unicode::Collate::Locale;
 
 binmode(STDERR, ":utf8");
 binmode(STDOUT, ":utf8");
 binmode(STDIN, ":utf8");
 
+my %input;
+
 while (<STDIN>) {
-  if (/\*\*/) {
-    my $last = pop @input;
-    push @input, $last.$_;
-  } else {
-    push @input, $_;
-  }
+  my ($lemma) = /^.*?\[\[(.*?)\]\]/ or next;
+  $input{$lemma} = $_;
 }
 
-@sort = sort @input;
+my $coll = Unicode::Collate::Locale->new(
+  locale   => "de_DE",
+  variable => 'non-ignorable',
+);
+
+@lemmata = $coll->sort(keys %input);
 
 @abc = qw/A B C D E F G H I J K L M N O P Q R S T U V W X Y Z/;
 $buchstabe = shift @abc;
 print "=== 0-9 ===\n";
   
-while($entry = shift @sort) {
-  $entry =~ /^.*?\[\[(.*?)\]\]/ or next;
-  $name = $1;
-  while ($buchstabe && $name ge $buchstabe) {
+while($lemma = shift @lemmata) {
+  while ($buchstabe && $coll->cmp($lemma, $buchstabe) >= 0) {
     print "\n=== $buchstabe ===\n";
     $buchstabe = shift @abc;
   }
-  print $entry;
+  print $input{$lemma};
 }
 
 while ($buchstabe = shift @abc) {
