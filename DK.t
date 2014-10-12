@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 209;
+use Test::More tests => 211;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -114,6 +114,9 @@ sub test_ignore_regions {
   
   notfound("{{DOI 1.1.2000}}");
   found("{{DOI 1.1.2000}}2.2.2002", "2.2.2002");
+
+  notfound("<code> foo 1.1.2000 bar </code>");
+  notfound("<syntaxhighlight lang='perl'> foo 1.1.2000 bar </syntaxhighlight>");
 }
 
 sub test_namespace {

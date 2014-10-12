@@ -58,7 +58,10 @@ sub mod_datumsformat {
 
   s/\{\{ChartplatzierungenX?\}\}(.*?)<\/div>//sg; # chartboxen
 
-  s/<source.*?<\/source>//sg; # source-Tag
+  #ignore various tags
+  s/<source.*?<\/source>//sg;
+  s/<code.*?<\/code>//sg;
+  s/<syntaxhighlight.*?<\/syntaxhighlight>//sg;
 
   s/{{(DEFAULTSORT|SORTIERUNG):.*?}}//sg;
 
