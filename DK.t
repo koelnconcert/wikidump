@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 214;
+use Test::More tests => 230;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -219,6 +219,28 @@ sub test_notalone {
   notfound("01.01.2000er-Zweig");
   notfound("2000-01-01-rc1");
   notfound("2000-01-01-12");
+}
+
+sub test_param_detection_styled {
+  found('{{foobar|foo 1.1.2000 bar}}', '1.1.2000');
+  found('{{foobar|*1.1.2000*}}', '1.1.2000');
+  notfound('{{foobar|1.1.2000}}');
+  notfound("{{foobar|''1.1.2000''}}");
+  notfound("{{foobar|'''1.1.2000'''}}");
+  notfound('{{foobar|(1.1.2000)}}');
+}
+
+sub test_param_detection_start_end {
+  found('{{foobar|foo 1.1.2000 bar}}', '1.1.2000');
+  notfound('{{foobar|param=1.1.2000}}');
+  notfound('{{foobar|1.1.2000}}');
+  notfound('{{foobar|1.1.2000|baz}}');
+  notfound('{{foobar|param=1.1.2000|baz}}');
+  notfound('{{foobar|baz|1.1.2000}}');
+  notfound('{{foobar|foo 1.1.2000|baz}}');
+  notfound('{{foobar|foo 1.1.2000}}');
+  notfound('{{foobar|1.1.2000 bar}}');
+  notfound('{{foobar|baz|1.1.2000 bar}}');
 }
 
 sub test_special_params {
