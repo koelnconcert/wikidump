@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 233;
+use Test::More tests => 234;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -219,6 +219,7 @@ sub test_notalone {
   notfound("01.01.2000er-Zweig");
   notfound("2000-01-01-rc1");
   notfound("2000-01-01-12");
+  notfound("Mo. 01.01. 12:00");
 }
 
 sub test_param_detection_styled {

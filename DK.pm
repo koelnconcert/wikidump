@@ -142,8 +142,8 @@ sub mod_datumsformat {
       d($b !~ /\[\[doi:[^\]\|]*$/is, "DOI-link") and # im PND Eintrag
       d($a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|ogv|pdf|webm|tif) *[|\n\]]/i, "filename") and
         # Zeilen/Parameter mit Bild-Endungen am Ende
-      d($a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i, "notalone") and # nicht "freistehend"
-        # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
+      d($a !~ /^(-?[A-Z]|[\-:]\d(?!\d*\.\d))/i, "notalone") and # nicht "freistehend"
+        # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999" oder ":00"
       d($b !~ /(version(snummer)?|kernel|linux|release|mac os|os x)(\]\])?[ :=\-]*$/i, "buzz") and 
         # Buzz-Wort
       d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.|gruppe|tagesordnungspunkt)(\s|&nbsp;)*'*$/i, "systematik") and 
