@@ -113,6 +113,8 @@ sub mod_datumsformat {
     $dk_filter_stats++;
 
     print STDERR "check $match\n" if $debug;
+    my $a_no_ref = $a =~ s/<ref[ >].*?<\/ref>//gr;
+    $a_no_ref =~ s/<ref[^>]*\/>//g;
 
     return (
       d($month <= 12, "m>12") and  # plausibles Datum 
@@ -126,7 +128,7 @@ sub mod_datumsformat {
       ($no_check_param or (
         d($b !~ /[|=][\s'\(]*$/s, "param1") and 
          # parameter oder Tabelle, auch geklammert, kursiv oder fett
-        d($a !~ /^[\s'\)]*[|}]/s, "param2") and 
+        d($a_no_ref !~ /^[\s'\)]*[|}]/s, "param2") and 
           # parameter oder Tabelle, auch geklammert, kursiv oder fett
         1
       )) and

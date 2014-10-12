@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 230;
+use Test::More tests => 233;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -234,6 +234,7 @@ sub test_param_detection_start_end {
   found('{{foobar|foo 1.1.2000 bar}}', '1.1.2000');
   notfound('{{foobar|param=1.1.2000}}');
   notfound('{{foobar|1.1.2000}}');
+  notfound('|1.1.2000|');
   notfound('{{foobar|1.1.2000|baz}}');
   notfound('{{foobar|param=1.1.2000|baz}}');
   notfound('{{foobar|baz|1.1.2000}}');
@@ -241,6 +242,8 @@ sub test_param_detection_start_end {
   notfound('{{foobar|foo 1.1.2000}}');
   notfound('{{foobar|1.1.2000 bar}}');
   notfound('{{foobar|baz|1.1.2000 bar}}');
+  notfound('|foo 1.1.2000<ref>bar</ref>|');
+  notfound('|foo 1.1.2000<ref group="bar" /> |');
 }
 
 sub test_special_params {
