@@ -113,9 +113,16 @@ sub mod_datumsformat {
     $dk_filter_stats++;
 
     print STDERR "check $match\n" if $debug;
-    my $a_no_ref = $a =~ s/<ref[ >].*?<\/ref>//gr;
-    $a_no_ref =~ s/<ref[^>]*\/>//g;
+    
+    # remove complete <ref> in $after
+    $a =~ s/<ref[ >].*?<\/ref>//sg;
+    $a =~ s/<ref[^>]*\/>//sg;
 
+    # remove complete templates and wikilinks in $before
+    my $bb = $b;
+    $bb =~ s/\[\[[^\[\]]*\]\]//sg;
+    $bb =~ s/\{\{[^\{\}]*\}\}//sg;
+    
     return (
       d($month <= 12, "m>12") and  # plausibles Datum 
       d($month >= 1, "m<1") and  # plausibles Datum 
@@ -128,7 +135,7 @@ sub mod_datumsformat {
       ($no_check_param or (
         d($b !~ /[|=][\s'\(]*$/s, "param1") and 
          # parameter oder Tabelle, auch geklammert, kursiv oder fett
-        d($a_no_ref !~ /^[\s'\)]*[|}]/s, "param2") and 
+        d($a !~ /^[\s'\)]*[|}]/s, "param2") and 
           # parameter oder Tabelle, auch geklammert, kursiv oder fett
         1
       )) and
@@ -150,21 +157,21 @@ sub mod_datumsformat {
         # Systematik
       d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "spezialfall") and # condition in parenthesis required, others use of unitializied value in d()
       d($b !~ /data-sort-value *= *["']$/, "data-sort-value") and
-      vorlage_param($b, 'internetquelle', 'titel|titelerg|zitat|werk') and
-      vorlage_param($b, 'cite [a-z ]*', 'title') and
-      vorlage_param($b, 'weblink ohne linktext', 'hinweis') and
-      vorlage_param($b, 'literatur', 'titel|titelerg|originaltitel|sammelwerk|werkerg') and
-      vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
-      vorlage_param($b, 'infobox fluss', 'pegel[0-9]') and
-      vorlage_param($b, 'infobox chemikalie', 'cas') and
-      vorlage_param($b, 'infobox software', 'aktuelle(vorab)?version') and
-      vorlage_param($b, '[a-z ]*', 'bild|datei|doi') and
-      vorlage_param_first_unnamed($b, '("|zitat)(-\w*)?') and
-      vorlage_param_first_unnamed($b, 'sortkey') and
-      vorlage_param_first_unnamed($b, 'salzburger nachrichten') and
-      vorlage_param_first_unnamed($b, 'banz') and
-      vorlage_param_first_unnamed($b, 'wikisource') and
-      vorlage_param_first_unnamed($b, 'doi') and
+      vorlage_param($bb, 'internetquelle', 'titel|titelerg|zitat|werk') and
+      vorlage_param($bb, 'cite [a-z ]*', 'title') and
+      vorlage_param($bb, 'weblink ohne linktext', 'hinweis') and
+      vorlage_param($bb, 'literatur', 'titel|titelerg|originaltitel|sammelwerk|werkerg') and
+      vorlage_param($bb, '("|zitat)(-\w*)?', 'text') and
+      vorlage_param($bb, 'infobox fluss', 'pegel[0-9]') and
+      vorlage_param($bb, 'infobox chemikalie', 'cas') and
+      vorlage_param($bb, 'infobox software', 'aktuelle(vorab)?version') and
+      vorlage_param($bb, '[a-z ]*', 'bild|datei|doi') and
+      vorlage_param_first_unnamed($bb, '("|zitat)(-\w*)?') and
+      vorlage_param_first_unnamed($bb, 'sortkey') and
+      vorlage_param_first_unnamed($bb, 'salzburger nachrichten') and
+      vorlage_param_first_unnamed($bb, 'banz') and
+      vorlage_param_first_unnamed($bb, 'wikisource') and
+      vorlage_param_first_unnamed($bb, 'doi') and
       1
     );
   }

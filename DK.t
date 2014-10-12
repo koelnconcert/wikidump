@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 234;
+use Test::More tests => 236;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -194,7 +194,7 @@ sub test_software_version {
   
   for my $word (@words) {
     notfound("$word 2000-01-01");
-    notfound("$word]]: 2000-01-01");
+    notfound("[[$word]]: 2000-01-01");
   }
   found("foobar: 2000-01-01", "2000-01-01");
   notfound("s3c-linux-2.6.21 foo");
@@ -245,6 +245,8 @@ sub test_param_detection_start_end {
   notfound('{{foobar|baz|1.1.2000 bar}}');
   notfound('|foo 1.1.2000<ref>bar</ref>|');
   notfound('|foo 1.1.2000<ref group="bar" /> |');
+  notfound("{{Zitat|foo [[Lemma|Schaf]] 1.1.2000 baz }}");
+  notfound("{{Zitat|one={{bar}}|text=foo 1.1.2000 baz }}");
 }
 
 sub test_special_params {
