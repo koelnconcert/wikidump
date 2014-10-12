@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 211;
+use Test::More tests => 214;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -190,7 +190,7 @@ sub test_files_at_end_of_line_or_parameter {
 }
 
 sub test_software_version {
-  my @words = (qw(version kernel linux release), "mac os", "os x");
+  my @words = (qw(version kernel linux release versionsnummer), "mac os", "os x");
   
   for my $word (@words) {
     notfound("$word 2000-01-01");
@@ -257,7 +257,9 @@ sub test_special_params {
   notfound("{{doi|10.5072/foo/01.01.2000}}");
   notfound("{{Infobox Burg |Bild = Foo 2013-01-21 42.JPG}}");
   notfound('data-sort-value="1966-01-15"');
-  notfound('{{foo|datei=foo 2000-01-01}}');
+  notfound('{{foo|datei=foo 2000-01-01 bar}}');
+  notfound('{{Infobox Software|AktuelleVersion=foo 1.1.2000 bar
+                              |AktuelleVorabVersion= bar 2.2.2002 bar}}');
 }
 
 sub test_special {

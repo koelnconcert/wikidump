@@ -142,19 +142,20 @@ sub mod_datumsformat {
         # Zeilen/Parameter mit Bild-Endungen am Ende
       d($a !~ /^(-?[A-Z]|-\d(?!\d*\.\d))/i, "notalone") and # nicht "freistehend"
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999"
-      d($b !~ /(version|kernel|linux|release|mac os|os x)(\]\])?[ :=\-]*$/i, "buzz") and 
+      d($b !~ /(version(snummer)?|kernel|linux|release|mac os|os x)(\]\])?[ :=\-]*$/i, "buzz") and 
         # Buzz-Wort
       d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.|gruppe|tagesordnungspunkt)(\s|&nbsp;)*'*$/i, "systematik") and 
         # Systematik
       d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "spezialfall") and # condition in parenthesis required, others use of unitializied value in d()
       d($b !~ /data-sort-value *= *["']$/, "data-sort-value") and
-      vorlage_param($b, 'internetquelle', 'titel|titelerg|zitat') and
+      vorlage_param($b, 'internetquelle', 'titel|titelerg|zitat|werk') and
       vorlage_param($b, 'cite [a-z ]*', 'title') and
       vorlage_param($b, 'weblink ohne linktext', 'hinweis') and
       vorlage_param($b, 'literatur', 'titel|titelerg|originaltitel|sammelwerk|werkerg') and
       vorlage_param($b, '("|zitat)(-\w*)?', 'text') and
       vorlage_param($b, 'infobox fluss', 'pegel[0-9]') and
       vorlage_param($b, 'infobox chemikalie', 'cas') and
+      vorlage_param($b, 'infobox software', 'aktuelle(vorab)?version') and
       vorlage_param($b, '[a-z ]*', 'bild|datei|doi') and
       vorlage_param_first_unnamed($b, '("|zitat)(-\w*)?') and
       vorlage_param_first_unnamed($b, 'sortkey') and
