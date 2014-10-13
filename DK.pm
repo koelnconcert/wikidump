@@ -119,7 +119,7 @@ sub mod_datumsformat {
     # remove complete templates and wikilinks in $before
     my $bb = $b;
     $bb =~ s/\[\[[^\[\]]*\]\]//sg;
-    $bb =~ s/\{\{[^\{\}]*\}\}//sg;
+    while ($bb =~ s/\{\{[^\{\}]*\}\}//sg) {}
     
     return (
       d($month <= 12, "m>12") and  # plausibles Datum 

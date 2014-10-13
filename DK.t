@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 236;
+use Test::More tests => 237;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -247,6 +247,7 @@ sub test_param_detection_start_end {
   notfound('|foo 1.1.2000<ref group="bar" /> |');
   notfound("{{Zitat|foo [[Lemma|Schaf]] 1.1.2000 baz }}");
   notfound("{{Zitat|one={{bar}}|text=foo 1.1.2000 baz }}");
+  notfound("{{Zitat|one={{bar|{{baz}}}}|text=foo 1.1.2000 baz }}");
 }
 
 sub test_special_params {
