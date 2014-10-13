@@ -159,7 +159,7 @@ sub mod_datumsformat {
       vorlage_param($bb, 'cite [a-z ]*', 'title') and
       vorlage_param($bb, 'weblink ohne linktext', 'hinweis') and
       vorlage_param($bb, 'literatur', 'titel|titelerg|originaltitel|sammelwerk|werkerg') and
-      vorlage_param($bb, '("|zitat)(-\w*)?', 'text') and
+      vorlage_param($bb, '("|zitat)(-\w*)?', 'text|quelle') and
       vorlage_param($bb, 'infobox fluss', 'pegel[0-9]') and
       vorlage_param($bb, 'infobox chemikalie', 'cas') and
       vorlage_param($bb, 'infobox software', 'aktuelle(vorab)?version') and

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 237;
+use Test::More tests => 239;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -262,7 +262,12 @@ sub test_special_params {
   notfound("{{literatur|originaltitel=foo 1.1.2000 bar}}");
   notfound("{{zitat-de|text=foo 1.1.2000 bar}}");
   notfound("{{zitat|text=foo 1.1.2000 bar}}");
+  notfound("{{zitat|text=foo|quelle=foo 1.1.2000 bar}}");
   notfound("{{zitat|foo 1.1.2000 bar}}");
+  TODO : {
+    local $TODO = "third unnamed parameter";
+    notfound("{{zitat|foo 1.1.2000 bar|Max|foo 1.1.2000 bar}}");
+  }
   found("{{zitat|foo 1.1.2000 bar|foo 2.2.2002 bar}}", "2.2.2002");
   notfound('{{"|text=foo 1.1.2000 bar}}');
   notfound('{{"|foo 1.1.2000 bar}}');
