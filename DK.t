@@ -173,6 +173,8 @@ sub test_ref {
   notfound("<ref name = 'foo 01.01.2000 bar'>");
   notfound("<ref NAME=\"foo 01.01.2000 bar\">");
   notfound('<ref group="Anm." name="01.01.2000">');
+
+  secfound("{{Zitat|foo<ref>01.01.2000</ref>}}", "01.01.2000");
 }
 
 sub test_files_at_end_of_line_or_parameter {

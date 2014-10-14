@@ -121,6 +121,12 @@ sub mod_datumsformat {
     $bb =~ s/\[\[[^\[\]]*\]\]//sg;
     while ($bb =~ s/\{\{[^\{\}]*\}\}//sg) {}
     
+    $bb =~ s/<ref[^>]*\/>//sg; # ref-tags without content (like <ref group="foo"/>)
+    while ($bb =~ s/<ref[^<]*<\/ref>//sg) {} # remove complete ref-tags
+    $bb =~ s/.*(?:<ref)//sg; # ref-tag found
+                             # -> must be inside due to prior removal of complete tags
+                             #-> clear before
+    
     return (
       d($month <= 12, "m>12") and  # plausibles Datum 
       d($month >= 1, "m<1") and  # plausibles Datum 
