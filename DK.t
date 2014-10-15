@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 239;
+use Test::More tests => 240;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
