@@ -116,8 +116,10 @@ sub mod_datumsformat {
     $a =~ s/<ref[ >].*?<\/ref>//sg;
     $a =~ s/<ref[^>]*\/>//sg;
 
-    # remove complete templates and wikilinks in $before
+    # remove complete templates, wikilinks and comments in $before
     my $bb = $b;
+    $bb =~ s/<!--.*?-->//sg; 
+
     $bb =~ s/\[\[[^\[\]]*\]\]//sg;
     while ($bb =~ s/\{\{[^\{\}]*\}\}//sg) {}
     
