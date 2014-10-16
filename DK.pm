@@ -125,7 +125,7 @@ sub mod_datumsformat {
     while ($bb =~ s/\{\{[^\{\}]*\}\}//sg) {}
     
     $bb =~ s/<ref[^>]*\/>//sg; # ref-tags without content (like <ref group="foo"/>)
-    while ($bb =~ s/<ref[^<]*<\/ref>//sg) {} # remove complete ref-tags
+    while ($bb =~ s/<ref[^>]*>.*?<\/ref>//sg) {} # remove complete ref-tags
     $bb =~ s/.*(?:<ref)//sg; # ref-tag found
                              # -> must be inside due to prior removal of complete tags
                              #-> clear before
