@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 242;
+use Test::More tests => 243;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -255,6 +255,7 @@ sub test_param_detection_complex {
   notfound("{{Zitat|one={{bar|{{baz}}}}|text=foo 1.1.2000 baz }}");
   notfound("{{Zitat|one=<ref>foo</ref>|text=foo 1.1.2000 baz }}");
   notfound("{{Zitat|one=<ref>foo<!-- bar --></ref>|text=foo 1.1.2000 baz }}");
+  notfound("{{Zitat|one=<ref>foo<br /></ref>|text=foo 1.1.2000 baz }}");
 }
 
 sub test_special_params {

@@ -53,6 +53,7 @@ sub mod_datumsformat {
   $_ = ${$page->text};
 
   s/<!--.*?-->/<!-- -->/sg; # Kommentare leeren
+  s/<br *\/?>//sg;
 
   s/<span[^>]*display:none[^>]*>.*?<\/span>//sg; # display:none ignorieren
 
