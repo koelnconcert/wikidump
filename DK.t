@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 243;
+use Test::More tests => 244;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -178,7 +178,7 @@ sub test_ref {
 }
 
 sub test_files_at_end_of_line_or_parameter {
-  my @exts = qw(jpeg jpg gif svg png ogg ogv pdf webm tif);
+  my @exts = qw(jpeg jpg gif svg png ogg ogv pdf webm tif tiff);
 
   notfound("2000-01-01.$_|") for @exts;
 
