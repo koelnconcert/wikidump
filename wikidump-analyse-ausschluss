@@ -15,7 +15,7 @@ my %ausschluss;
 while (<DATEI>) {
   chomp;
   my ($lemma, $found, $reason) =
-     /^:?\* *\[\[(.*?)\]\], (.*?); *([^;]*) *$/ or next;
+     /^:?\* *\[\[(.*?)\]\], (.*?); *([^;]*?) *$/ or next;
   $lemma =~ tr/_/ /;
   $found =~ s/ *$//;
   $reason = "---" unless $reason;
