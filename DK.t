@@ -288,7 +288,8 @@ sub test_special_params {
   notfound('{{Wikisource|Artikel 01.01.2000 foo|Text|lang=de}}');
   found('{{Wikisource|Artikel|Text 01.01.2000 foo|lang=de}}', "01.01.2000");
   notfound('[[doi:10.5072/foo-01.01.2000]]');
-  notfound('{{Infobox Fluss| PEGEL1=Pfaffenhofen/14.9/505/1.10/11.02.1932/2.48/4.49/29.0/74.6/14.04.1994');
+  notfound('{{Infobox Fluss| PEGEL1=Pfaffenhofen/14.9/505/1.10/11.02.1932/2.48/4.49/29.0/74.6/14.04.1994
+              | QUELLSCHÜTTUNG=.042 / 14.07.2002 / / .187 / / 1.623 / 21.08.2005 / }}');
   notfound('{{Infobox Fluss
               | NAME= Schwarza
               | NACHWEIS-EINZUGSGEBIET= {{GeoQuelle|DE-TH|GKZ}}
