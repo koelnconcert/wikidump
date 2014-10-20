@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 244;
+use Test::More tests => 245;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -303,6 +303,7 @@ sub test_special_params {
   notfound('{{foo|datei=foo 2000-01-01 bar}}');
   notfound('{{Infobox Software|AktuelleVersion=foo 1.1.2000 bar
                               |AktuelleVorabVersion= bar 2.2.2002 bar}}');
+  notfound('{{Commonscat|foo 2000-01-01 bar|}}');
 }
 
 sub test_special {

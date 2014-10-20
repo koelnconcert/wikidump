@@ -179,6 +179,7 @@ sub mod_datumsformat {
       vorlage_param_first_unnamed($bb, 'banz') and
       vorlage_param_first_unnamed($bb, 'wikisource') and
       vorlage_param_first_unnamed($bb, 'doi') and
+      vorlage_param_first_unnamed($bb, 'commonscat') and
       1
     );
   }
