@@ -78,6 +78,7 @@ for (@ARGV) {
   pod2usage("module $_ is unkown") if not defined $mod;
   push @mods, $mod;
   $mod->{show_context} ||= 30;
+  $mod->{show_context_newlines} ||= 0;
   $mod->{show_contextlines} ||= 0;
   $mod->{show_info} ||=0;
   $mod->{show_contextlines} = $opts{l} if defined $opts{l};
@@ -355,6 +356,10 @@ sub insert_found {
   $found++;
   $secondary_count++ if $secondary_flag;
   $secondary_flag = 0;
+  if (!$mod->{show_context_linebreaks}) {
+    $before =~ s/\n/ /g;
+    $after =~ s/\n/ /g;
+  }
   if ($show_context) {
     $context .= substr($before,length($before)-$show_context,$show_context)
         	      .$match.substr($after,0,$show_context)."\n";
