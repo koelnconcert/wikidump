@@ -80,7 +80,7 @@ sub update_ausschluss {
 
   while (<DATEI>) {
     if (my ($lemma) = /^\*\[\[(.*?)\]\]/) {
-      print STDERR "*[[$lemma]], ".$parser{$lemma}->{found}." <small>".$ausschluss{$lemma}->{reason}."</small>\n";
+      print STDERR "*[[$lemma]], ".$parser{$lemma}->{found}."; ".$ausschluss{$lemma}->{reason}."\n";
     } else {
       print STDERR;
     }
