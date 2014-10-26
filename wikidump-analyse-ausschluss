@@ -49,7 +49,9 @@ while (<STDIN>) {
 
 my %reasons;
 foreach $val (values %ausschluss) {
-  $reasons{$val->{reason}} += 1;
+  foreach $reason (split / *, */, $val->{reason}) {
+    $reasons{$reason} += 1;
+  }
 }
 
 @reasons = sort { $reasons{$b} <=> $reasons{$a} } keys %reasons;
@@ -59,7 +61,8 @@ if ($opts{g}) {
   foreach $reason (@reasons) {
     print "== $reason ($reasons{$reason}) ==\n";
     foreach $lemma (@lemmata) {
-      if ($ausschluss{$lemma}->{reason} eq $reason) {
+      my @lemma_reasons = split / *, */, $ausschluss{$lemma}->{reason};
+      if ($reason ~~ @lemma_reasons) {
         print_one($lemma);
       }
     }
