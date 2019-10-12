@@ -174,6 +174,7 @@ sub mod_datumsformat {
       vorlage_param($bb, 'infobox chemikalie', 'cas') and
       vorlage_param($bb, 'infobox software', 'aktuelle(vorab)?version') and
       vorlage_param($bb, '[a-z ]*', 'bild|datei|doi') and
+      vorlage_param($bb, 'infobox rechtsakt \(eu\)', 'fundstelle') and
       vorlage_param_first_unnamed($bb, '("|zitat)(-\w*)?') and
       vorlage_param_first_unnamed($bb, 'sortkey') and
       vorlage_param_first_unnamed($bb, 'salzburger nachrichten') and
