@@ -73,7 +73,7 @@ sub test_monthnames {
     Februar Feb Feb.
     April Apr Apr.
     März Mär Mär.
-    Mai 
+    Mai
     Juni Jun Jun.
     Juli Jul Jul.
     August Aug Aug.
@@ -101,7 +101,7 @@ sub test_ignore_regions {
 
   notfound("{{ChartplatzierungenX}}1.1.2000</div>");
   found("{{ChartplatzierungenX}}1.1.2000</div>2.2.2002", "2.2.2002");
-  
+
   notfound("<source>1.1.2000</source>");
   found("<source>1.1.2000</source>2.2.2002", "2.2.2002");
 
@@ -113,7 +113,7 @@ sub test_ignore_regions {
 
   notfound("{{PND 1.1.2000}}");
   found("{{PND 1.1.2000}}2.2.2002", "2.2.2002");
-  
+
   notfound("{{DOI 1.1.2000}}");
   found("{{DOI 1.1.2000}}2.2.2002", "2.2.2002");
 
@@ -125,7 +125,7 @@ sub test_namespace {
   my $match = "01.01.2000";
   my $page = MockWikiPage->new($match);
   my @founds;
-  
+
   $page->{namespace} = "";
   @founds = DK::check($page);
   ok(scalar @founds == 1, "article namespace");
@@ -171,7 +171,7 @@ sub test_ref {
 
   notfound("<ref name='foo 01.01.2000 bar'>");
   found("<ref name='foobar'>01.01.2000", "01.01.2000");
-  
+
   notfound("<ref name = 'foo 01.01.2000 bar'>");
   notfound("<ref NAME=\"foo 01.01.2000 bar\">");
   notfound('<ref group="Anm." name="01.01.2000">');
@@ -195,7 +195,7 @@ sub test_files_at_end_of_line_or_parameter {
 
 sub test_software_version {
   my @words = (qw(version kernel linux release versionsnummer), "mac os", "os x");
-  
+
   for my $word (@words) {
     notfound("$word 2000-01-01");
     notfound("[[$word]]: 2000-01-01");
@@ -214,7 +214,7 @@ sub test_chapter {
   notfound(", kapitel&nbsp;1.1.99");
   # TODO get rid of \W in regexp
 
-  notfound(" System-Nr. ''01.01.01"); 
+  notfound(" System-Nr. ''01.01.01");
   notfound("in der unbenannten Gruppe ''25.01.04'' zu finden");
 }
 
@@ -341,7 +341,7 @@ sub found {
   my $ok = scalar @founds == 1
 	  && $founds[0]->{match} eq $match
 	  && $founds[0]->{secondary_flag} eq $secondary;
-  
+
   my $flag = $secondary ? "2" : "=";
   my $msg="finding '$match' in '$context'";
   $msg .= " as secondary" if $secondary ;

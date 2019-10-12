@@ -19,7 +19,7 @@ while (<DATEI>) {
   $lemma =~ tr/_/ /;
   $found =~ s/ *$//;
   $reason = "---" unless $reason;
-  $ausschluss{$lemma} = { 
+  $ausschluss{$lemma} = {
     found => $found,
     reason => $reason
   };
@@ -112,8 +112,7 @@ sub print_one {
       chomp $context;
       foreach $line (split /\n/, $context) {
         print "::<nowiki>$line</nowiki>\n";
-      } 
+      }
     }
   }
 }
-

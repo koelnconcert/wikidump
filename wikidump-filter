@@ -34,7 +34,7 @@ while (<STDIN>) {
   } else {
     print $_;
   }
-    
+
 }
 
 print STDERR sort values %filter;

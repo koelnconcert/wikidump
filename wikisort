@@ -23,7 +23,7 @@ my $coll = Unicode::Collate::Locale->new(
 @abc = qw/A B C D E F G H I J K L M N O P Q R S T U V W X Y Z/;
 $buchstabe = shift @abc;
 print "=== 0-9 ===\n";
-  
+
 while($lemma = shift @lemmata) {
   while ($buchstabe && $coll->cmp($lemma, $buchstabe) >= 0) {
     print "\n=== $buchstabe ===\n";
@@ -35,4 +35,3 @@ while($lemma = shift @lemmata) {
 while ($buchstabe = shift @abc) {
   print "\n=== $buchstabe ===\n";
 }
-

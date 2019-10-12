@@ -9,45 +9,45 @@ use Data::Dumper;
 
 binmode(STDOUT, ":utf8");
 
-my %modules = ( 
-  dk => { 
-    name => "Datumskonventionen", 
+my %modules = (
+  dk => {
+    name => "Datumskonventionen",
     func => \&mod_datumsformat,
     show_info => 5,
     show_contextlines => 5
   },
-  "dker" => { 
-    name => "Datumskonventionen (er)", 
+  "dker" => {
+    name => "Datumskonventionen (er)",
     func => \&mod_datumsformat,
     show_info => 5,
     show_contextlines => 5
   },
-  "dkyy" => { 
-    name => "Datumskonventionen (yy)", 
+  "dkyy" => {
+    name => "Datumskonventionen (yy)",
     func => \&mod_datumsformat,
     show_info => 5,
     show_contextlines => 5
   },
-  "dkyyy" => { 
-    name => "Datumskonventionen (yyy)", 
+  "dkyyy" => {
+    name => "Datumskonventionen (yyy)",
     func => \&mod_datumsformat,
     show_info => 5,
     show_contextlines => 5
   },
-  bkl => { 
-    name => "Begriffsklaerung", 
+  bkl => {
+    name => "Begriffsklaerung",
     func => \&mod_bkl,
     show_info => -1
   },
-  red => { 
-    name => "Redirects", 
+  red => {
+    name => "Redirects",
     func => \&mod_redirects,
-    redirects => 1, 
+    redirects => 1,
     show_info => -1,
     show_contextlines => -1
   },
-  dagger => { 
-    name => "Pluszeichen als Dagger", 
+  dagger => {
+    name => "Pluszeichen als Dagger",
     func => \&mod_plusdagger,
     show_context => 10,
     show_contextlines => 5
@@ -142,7 +142,7 @@ while(defined($page = $parser->next)) {
     ($found, $context, $info, $secondary_flag, $secondary_count) = ();
 
     $mod->{func}->($mod, $page) unless $page->redirect and !$mod->{redirects};
-  
+
     if ($found > 0 ) {
       $mod->{count}++;
       output_one($mod, $title, $found == $secondary_count);
@@ -194,7 +194,7 @@ sub print_progress {
 ###########################################
   my $time_cur = time;
   my $byte_cur = $parser->current_byte;
-  
+
   my $time_last = shift @time_hist;
   my $byte_last = shift @byte_hist;
 
@@ -206,7 +206,7 @@ sub print_progress {
     my $lemma_rate = ($time_diff>0)?($lemma_diff / ($time_diff)):0;
     my $eta = ($rate>0)?(int (($size - $byte_cur) / $rate)):0;
     my $time_end = $eta + $time_cur - $time_start;
-    printf STDERR ' %s: %d:%02d/%d:%02d (%.02f MB/s, %d A/s)', 
+    printf STDERR ' %s: %d:%02d/%d:%02d (%.02f MB/s, %d A/s)',
       $text,
       $eta / 60,
       $eta % 60,
@@ -217,14 +217,14 @@ sub print_progress {
   }
 
   print STDERR "---------\n" if $debug;
- 
+
   printf STDERR "\r".'%2.2f%% %d:%02d',
     $byte_cur/$size*100,
     ($time_cur-$time_start) / 60,
     ($time_cur-$time_start) % 60;
   _print_rate("total", $time_cur, $time_cur - $time_start,
               $byte_cur, $byte_cur, $count);
-  _print_rate("cur", $time_cur, $time_cur - $time_last, 
+  _print_rate("cur", $time_cur, $time_cur - $time_last,
               $byte_cur, $byte_cur - $byte_last,
               min($progress_step * $time_hist_length, $count));
 
@@ -236,7 +236,7 @@ sub print_progress {
   }
 
   print STDERR "\n" if $debug;
-  
+
   if ($debug and $dk_filter_stats > 0) {
     print STDERR " filter: $dk_filter_stats = ";
     print keys %dk_filter_stats;
@@ -309,13 +309,13 @@ sub mod_redirects {
   return unless $page->redirect;
   my $title = $page->title;
   $_ = ${$page->text};
-  #s/\#REDIRECT[ :]*\[\[.*?\]\]\.?//i; 
-  s/\#REDIRECT.*$//mi; 
+  #s/\#REDIRECT[ :]*\[\[.*?\]\]\.?//i;
+  s/\#REDIRECT.*$//mi;
   my $context_hack = $_; #Hack
   s/\[\[.*?\]\]//g; # Links entfernen (inkl. Kategorien)
   s/\{\{.*?\}\}//sg; # Vorlagen entfernen
   s/\s//g; # Leerzeichen entfernen
-  insert_simple($mod, $title ,"Text (" . (length $_) . ")") if length $_ > 0; 
+  insert_simple($mod, $title ,"Text (" . (length $_) . ")") if length $_ > 0;
   $context = $context_hack;
 }
 
@@ -352,7 +352,7 @@ sub insert_found {
   my($mod, $title, $before, $match, $after) = @_;
   my $show_context = $mod->{show_context};
   my $show_info = $mod->{show_info};
- 
+
   $found++;
   $secondary_count++ if $secondary_flag;
   $secondary_flag = 0;
@@ -402,10 +402,10 @@ sub output_one {
   $| = 1;
   my $i = 0;
   foreach my $line (split /\n/, $context) {
-    if ($i++ < $show_contextlines || $show_contextlines == -1) { 
+    if ($i++ < $show_contextlines || $show_contextlines == -1) {
       print "$mod->{shortname}: ";
       print ":" if $secondary;
-      print ":<nowiki>$line</nowiki>\n"; 
+      print ":<nowiki>$line</nowiki>\n";
     }
   }
 }

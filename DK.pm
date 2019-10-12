@@ -68,15 +68,15 @@ sub mod_datumsformat {
   # und verhindert das Ignorieren von späteren Parametern
   s/\{\{GeoQuelle\|.*?\}\}//isg;
 
-  # todo: 
+  # todo:
   # Zitat-Vorlagen
   # "vermutlich http-link" überprüfen
   # Chartplatzierungen sieht komisch aus
   # Literatur/Weblinks/etc.-Abschnitte verbessern (auch "===")
   #   z.B. [[Alfred Philippson]]
-  # {{Großes Bild}} 
+  # {{Großes Bild}}
   # test iso Kontext unabhängig von Zeichen-Anzahl?!
-  
+
   sub d {
     my ($bool, $text) = @_;
     $dk_filter_stats{$text}++ if !$bool;
@@ -112,27 +112,27 @@ sub mod_datumsformat {
     $dk_filter_stats++;
 
     print STDERR "check $match\n" if $debug;
-    
+
     # remove complete <ref> in $after
     $a =~ s/<ref[ >].*?<\/ref>//sg;
     $a =~ s/<ref[^>]*\/>//sg;
 
     # remove complete templates, wikilinks and comments in $before
     my $bb = $b;
-    $bb =~ s/<!--.*?-->//sg; 
+    $bb =~ s/<!--.*?-->//sg;
 
     $bb =~ s/\[\[[^\[\]]*\]\]//sg;
     while ($bb =~ s/\{\{[^\{\}]*\}\}//sg) {}
-    
+
     $bb =~ s/<ref[^>]*\/>//sg; # ref-tags without content (like <ref group="foo"/>)
     while ($bb =~ s/<ref[^>]*>.*?<\/ref>//sg) {} # remove complete ref-tags
     $bb =~ s/.*(?:<ref)//sg; # ref-tag found
                              # -> must be inside due to prior removal of complete tags
                              #-> clear before
-    
+
     return (
-      d($month <= 12, "m>12") and  # plausibles Datum 
-      d($month >= 1, "m<1") and  # plausibles Datum 
+      d($month <= 12, "m>12") and  # plausibles Datum
+      d($month >= 1, "m<1") and  # plausibles Datum
       d($day <= 31, "d>31") and
       d($day >= 1, "d<1") and
       d($year <= 2100, "y>2100") and
@@ -140,9 +140,9 @@ sub mod_datumsformat {
       d($b !~ /\[\/\/\S*$/, "url-without-protocol") and # link
       d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
       ($no_check_param or (
-        d($b !~ /[|=][\s'\(]*$/s, "param1") and 
+        d($b !~ /[|=][\s'\(]*$/s, "param1") and
          # parameter oder Tabelle, auch geklammert, kursiv oder fett
-        d($a !~ /^[\s'\)]*[|}]/s, "param2") and 
+        d($a !~ /^[\s'\)]*[|}]/s, "param2") and
           # parameter oder Tabelle, auch geklammert, kursiv oder fett
         1
       )) and
@@ -158,11 +158,11 @@ sub mod_datumsformat {
         # Zeilen/Parameter mit Bild-Endungen am Ende
       d($a !~ /^(-?[A-Z]|[\-:]\d(?!\d*\.\d))/i, "notalone") and # nicht "freistehend"
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999" oder ":00"
-      d($b !~ /(version(snummer)?|kernel|linux|release|mac os|os x)(\]\])?[ :=\-]*$/i, "buzz") and 
+      d($b !~ /(version(snummer)?|kernel|linux|release|mac os|os x)(\]\])?[ :=\-]*$/i, "buzz") and
         # Buzz-Wort
-      d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.|gruppe|tagesordnungspunkt)(\s|&nbsp;)*'*$/i, "systematik") and 
+      d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.|gruppe|tagesordnungspunkt)(\s|&nbsp;)*'*$/i, "systematik") and
         # Systematik
-      d($b !~ /(CAS|DIN|EN|VDE|ISO|EC|ÖNORM|RVS|Euronorm)(&nbsp;)?.{0,9}$/, "norm") and 
+      d($b !~ /(CAS|DIN|EN|VDE|ISO|EC|ÖNORM|RVS|Euronorm)(&nbsp;)?.{0,9}$/, "norm") and
       d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "spezialfall") and # condition in parenthesis required, others use of unitializied value in d()
       d($b !~ /data-sort-value *= *["']$/, "data-sort-value") and
       vorlage_param($bb, 'internetquelle', 'titel|titelerg|zitat|werk') and
@@ -197,7 +197,7 @@ sub mod_datumsformat {
       insert_found($`,$&,$') if _check($1, $2, $3, $`, $&, $');
     }
   }
-  
+
   #
   # 1.02.799
   #
@@ -211,14 +211,14 @@ sub mod_datumsformat {
           $3 ne "000"
       ) {
         insert_found($`,$&,$');
-      }	
+      }
     }
   }
 
   #
   # 1999-2-1, 1999-02-01
   #
-  
+
   if ($mod eq "dk") {
     while (/(?<![\-0-9])(\d{4})-(\d{1,2})-(\d{1,2})(?![\-0-9])/g) {
       insert_found($`,$&,$') if _check($3, $2, $1, $`, $&, $');
@@ -228,11 +228,11 @@ sub mod_datumsformat {
   #
   # 01. Februar 1999,  02. Apr. 2008, 03 Jan 2009
   #
- 
+
   if ($mod eq "dk") {
     while (/\b(0\d)\.?(?:\ |&nbsp;)*([\w\.]+) # Tag und Monat
-            (?:\]\])? 
-	    (?:(?:\ |&nbsp;)*(?:\[\[)? 
+            (?:\]\])?
+	    (?:(?:\ |&nbsp;)*(?:\[\[)?
 	       (\d{4})(?!\d) # Jahr
 	    )? # optional
 	   /gx) {
@@ -249,7 +249,7 @@ sub mod_datumsformat {
   # 1. Januar 38
   #
 
-  if ($mod eq "dkyy" and ! /[vn]\. (Chr\.|u\. Z)/ 
+  if ($mod eq "dkyy" and ! /[vn]\. (Chr\.|u\. Z)/
       and ! /Römische Kaiserzeit/
   ) {
     while (/\b(\d{1,2})\.\ *([\w\.]+)\ +'?(\d{2})(?![.:]?\d)/g) {
@@ -271,15 +271,15 @@ sub mod_datumsformat {
   #
   #  20er
   #
-  
+
   if ($mod eq "dker" or
-#      $mod eq "dk" or 
+#      $mod eq "dk" or
       0) {
     while (/(?<![\-0-9])([1-9]0er[-\ ]*Jahre)/g) {
       if ($' !~ /^.{0,30}(Jahrhundert|Jh)/) {
         $secondary_flag = $mod eq "dk";
         insert_found($`,$&,$');
-      }	
+      }
     }
   }
 
