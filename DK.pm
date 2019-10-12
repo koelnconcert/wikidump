@@ -181,6 +181,8 @@ sub mod_datumsformat {
       vorlage_param_first_unnamed($bb, 'wikisource') and
       vorlage_param_first_unnamed($bb, 'doi') and
       vorlage_param_first_unnamed($bb, 'commonscat') and
+      vorlage_param_first_unnamed($bb, 'exzellent') and
+      vorlage_param_first_unnamed($bb, 'lesenswert') and
       1
     );
   }
