@@ -62,11 +62,11 @@ sub mod_datumsformat {
   #ignore various tags
   s/<(source|code|syntaxhighlight).*?<\/\1>//sg;
 
-  s/{{(DEFAULTSORT|SORTIERUNG):.*?}}//sg;
+  s/\{\{(DEFAULTSORT|SORTIERUNG):.*?\}\}//sg;
 
   # hack: GeoQuelle kommt innerhalb von Vorlage:Infobox Fluss vor
   # und verhindert das Ignorieren von späteren Parametern
-  s/{{GeoQuelle\|.*?}}//isg; 
+  s/\{\{GeoQuelle\|.*?\}\}//isg;
 
   # todo: 
   # Zitat-Vorlagen
