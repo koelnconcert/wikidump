@@ -184,6 +184,7 @@ sub mod_datumsformat {
       vorlage_param_first_unnamed($bb, 'commonscat') and
       vorlage_param_first_unnamed($bb, 'exzellent') and
       vorlage_param_first_unnamed($bb, 'lesenswert') and
+      vorlage_param_first_unnamed($bb, 'lückenhaft') and
       1
     );
   }
