@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 253;
+use Test::More tests => 254;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -312,6 +312,7 @@ sub test_special_params {
   notfound('{{Lesenswert|01. August 2018|179607316}}');
   notfound('{{Infobox Rechtsakt (EU)| Fundstelle = ABl. L 309 vom 25.11.2005, S. 9–12 }}');
   notfound('{{lückenhaft|Australien schaltet zum 31.12.2017 ab.}}');
+  notfound('{{überarbeiten|grund=in 1.1.18 wird}}');
 }
 
 sub test_special {
