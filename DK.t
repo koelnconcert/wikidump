@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 251;
+use Test::More tests => 253;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -279,6 +279,8 @@ sub test_special_params {
     notfound("{{zitat|foo 1.1.2000 bar|Max|foo 1.1.2000 bar}}");
   }
   found("{{zitat|foo 1.1.2000 bar|foo 2.2.2002 bar}}", "2.2.2002");
+  notfound("{{Inschrift|foo 1.1.2000 bar}}");
+  notfound("{{Inschrift|Block=1|Text=foo 1.1.2000 bar}}");
   notfound('{{"|text=foo 1.1.2000 bar}}');
   notfound('{{"|foo 1.1.2000 bar}}');
   notfound('{{"-fr|text=foo 1.1.2000 bar}}');
