@@ -177,6 +177,7 @@ sub mod_datumsformat {
       vorlage_param($bb, '[a-z ]*', 'bild|datei|doi') and
       vorlage_param($bb, 'infobox rechtsakt \(eu\)', 'fundstelle') and
       vorlage_param($bb, 'überarbeiten', 'grund') and
+      vorlage_param($bb, 'lagis', 'titel') and
       vorlage_param_first_unnamed($bb, '("|zitat)(-\w*)?') and
       vorlage_param_first_unnamed($bb, 'inschrift') and
       vorlage_param_first_unnamed($bb, 'sortkey') and

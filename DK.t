@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 257;
+use Test::More tests => 258;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -317,6 +317,7 @@ sub test_special_params {
   notfound('{{lückenhaft|Australien schaltet zum 31.12.2017 ab.}}');
   notfound('{{überarbeiten|grund=in 1.1.18 wird}}');
   notfound('{{belege fehlen|01. August 2018}}');
+  notfound('{{LAGIS|ref=nein|DB=OL|ID=15259|titel=Beerfelden, Stadtgemeinde (1.7.1971-31.12.2017), Odenwaldkreis}}');
 }
 
 sub test_special {
