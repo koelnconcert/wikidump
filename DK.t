@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 258;
+use Test::More tests => 259;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -329,6 +329,8 @@ sub test_special {
     found("Gemeinden FOOBAR und ihre Veränderungen seit 01.01.1948 in den neuen Ländern", "01.01.1948");
     found("Gemeinden 1994 und ihre Veränderungen seit 01.01.1948 in FOOBAR", "01.01.1948");
   }
+
+  notfound("Kultusministerium 25.02.2016 Drucksache 6/4829");
 }
 
 sub test_other {
