@@ -312,6 +312,7 @@ sub test_special_params {
   notfound('{{Commonscat|foo 2000-01-01 bar|}}');
   notfound('{{Exzellent|01. August 2018|179607316}}');
   notfound('{{Lesenswert|01. August 2018|179607316}}');
+  notfound('{{Informativ|01. August 2018|179607316}}');
   notfound('{{Infobox Rechtsakt (EU)| Fundstelle = ABl. L 309 vom 25.11.2005, S. 9–12 }}');
   notfound('{{lückenhaft|Australien schaltet zum 31.12.2017 ab.}}');
   notfound('{{überarbeiten|grund=in 1.1.18 wird}}');
