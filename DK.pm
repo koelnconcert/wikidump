@@ -164,7 +164,8 @@ sub mod_datumsformat {
         # Systematik
       d($b !~ /(CAS|DIN|EN|VDE|ISO|EC|ÖNORM|RVS|Euronorm)(&nbsp;)?.{0,9}$/, "norm") and
       d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "spezialfall") and # condition in parenthesis required, others use of unitializied value in d()
-      d(($b !~ /Kultusministerium $/ and $m.$a !~ /^25.02.2016 Drucksache 6\/4829/), "Spezialfall; Denkmalverzeichnis Sachsen-Anhalt") and
+      d(($b !~ /Kultusministerium $/ and $m.$a !~ /^25.02.2016 Drucksache 6\/4829/), "Spezialfall; Denkmalverzeichnis Sachsen-Anhalt I") and
+      d(($b !~ /Staatskanzlei und Ministerium für Kultur $/ and $m.$a !~ /^08.03.2019 Drucksache 7\/4067/), "Spezialfall: Denkmalverzeichnis Sachsen-Anhalt II") and
       d($b !~ /data-sort-value *= *["']$/, "data-sort-value") and
       vorlage_param($bb, 'internetquelle', 'titel|titelerg|zitat|werk') and
       vorlage_param($bb, 'cite [a-z ]*', 'title') and
