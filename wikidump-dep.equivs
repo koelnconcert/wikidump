@@ -1,0 +1,8 @@
+Section: misc
+Priority: optional
+Standards-Version: 3.9.2
+Package: wikidump-dep
+Version: 1
+Maintainer: Sebastian Peters <koelnconcert@googlemail.com>
+Depends: libparse-mediawikidump-perl, libclass-inspector-perl, libdata-dump-perl
+Description: dependency package for wikidump scripts
