@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 261;
+use Test::More tests => 262;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -318,6 +318,7 @@ sub test_special_params {
   notfound('{{überarbeiten|grund=in 1.1.18 wird}}');
   notfound('{{belege fehlen|01. August 2018}}');
   notfound('{{LAGIS|ref=nein|DB=OL|ID=15259|titel=Beerfelden, Stadtgemeinde (1.7.1971-31.12.2017), Odenwaldkreis}}');
+  notfound('{{Lückenhaft|1=Leider ist es noch sehr Lückenhaft, Stand: 03. Dezember 2014 (CET)|2=In diesem Abschnitt}}');
 }
 
 sub test_special {

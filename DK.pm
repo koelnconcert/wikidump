@@ -94,6 +94,12 @@ sub mod_datumsformat {
     return 1;
   }
 
+  sub vorlage {
+    my ($b, $vorlage, $param) = @_;
+    my $re = '\{\{('.$vorlage.')\|[^\}]*$';
+    return d($b !~ /$re/si, "vorlage ($vorlage)");
+  }
+
   sub vorlage_param {
     my ($b, $vorlage, $param) = @_;
     my $re = '\{\{('.$vorlage.')(?![a-z])[^\}]*\|\s*('.$param.')\s*=[^|\}]*$';
@@ -150,8 +156,6 @@ sub mod_datumsformat {
       e($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
       e($a !~ /^[^<]*<\/ref>/s, "ref") and # ref-tags
       d($b !~ /<ref\s+[^>]*$/i, "refparam") and # für <ref name="....." />
-      d($b !~ /\{\{PND[^\}]*$/s, "PND") and # im PND Eintrag
-      d($b !~ /\{\{DOI[^\}]*$/s, "DOI-vorlage") and # im PND Eintrag
       d($b !~ /DOI=[^ \}\|]*$/s, "DOI-param") and # im PND Eintrag
       d($b !~ /\[\[doi:[^\]\|]*$/is, "DOI-link") and # im PND Eintrag
       d($a !~ /^[^|\n\[]*\.(jpe?g|gif|svg|png|ogg|ogv|pdf|webm|tiff?) *[|\n\]]/i, "filename") and
@@ -188,9 +192,11 @@ sub mod_datumsformat {
       vorlage_param_first_unnamed($bb, 'wikisource') and
       vorlage_param_first_unnamed($bb, 'doi') and
       vorlage_param_first_unnamed($bb, 'commonscat') and
-      vorlage_param_first_unnamed($bb, 'exzellent|lesenswert|informativ') and
-      vorlage_param_first_unnamed($bb, 'lückenhaft') and
-      vorlage_param_first_unnamed($bb, 'belege fehlen') and
+      vorlage($bb, "PND") and
+      vorlage($bb, "DOI") and
+      vorlage($bb, 'exzellent|lesenswert|informativ') and
+      vorlage($bb, 'lückenhaft') and
+      vorlage($bb, 'belege fehlen') and
       1
     );
   }
