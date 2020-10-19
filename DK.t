@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 262;
+use Test::More tests => 263;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -315,10 +315,11 @@ sub test_special_params {
   notfound('{{Informativ|01. August 2018|179607316}}');
   notfound('{{Infobox Rechtsakt (EU)| Fundstelle = ABl. L 309 vom 25.11.2005, S. 9–12 }}');
   notfound('{{lückenhaft|Australien schaltet zum 31.12.2017 ab.}}');
+  notfound('{{Lückenhaft|1=Leider ist es noch sehr Lückenhaft, Stand: 03. Dezember 2014 (CET)|2=In diesem Abschnitt}}');
   notfound('{{überarbeiten|grund=in 1.1.18 wird}}');
   notfound('{{belege fehlen|01. August 2018}}');
   notfound('{{LAGIS|ref=nein|DB=OL|ID=15259|titel=Beerfelden, Stadtgemeinde (1.7.1971-31.12.2017), Odenwaldkreis}}');
-  notfound('{{Lückenhaft|1=Leider ist es noch sehr Lückenhaft, Stand: 03. Dezember 2014 (CET)|2=In diesem Abschnitt}}');
+  notfound('{{Veraltet|<Bezug>|wurde mit 31.3.2016 eingestellt.|seit=2016}}');
 }
 
 sub test_special {

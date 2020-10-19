@@ -195,8 +195,7 @@ sub mod_datumsformat {
       vorlage($bb, "PND") and
       vorlage($bb, "DOI") and
       vorlage($bb, 'exzellent|lesenswert|informativ') and
-      vorlage($bb, 'lückenhaft') and
-      vorlage($bb, 'belege fehlen') and
+      vorlage($bb, 'lückenhaft|belege fehlen|veraltet') and
       1
     );
   }
