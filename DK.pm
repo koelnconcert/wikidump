@@ -172,7 +172,7 @@ sub mod_datumsformat {
       d(($b !~ /Staatskanzlei und Ministerium für Kultur $/ and $m.$a !~ /^08.03.2019 Drucksache 7\/4067/), "Spezialfall: Denkmalverzeichnis Sachsen-Anhalt II") and
       d($b !~ /data-sort-value *= *["']$/, "data-sort-value") and
       vorlage_param($bb, '[a-z ]*', 'bild|datei|doi|zitat') and
-      vorlage_param($bb, 'internetquelle', 'titel|titelerg|werk|zugriff') and
+      vorlage_param($bb, 'internetquelle', 'titel|titelerg|werk|zugriff|datum') and
       vorlage_param($bb, 'cite [a-z ]*', 'title') and
       vorlage_param($bb, 'weblink ohne linktext', 'hinweis') and
       vorlage_param($bb, 'literatur', 'titel|titelerg|originaltitel|sammelwerk|werkerg') and
