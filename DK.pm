@@ -174,7 +174,7 @@ sub mod_datumsformat {
       vorlage_param($bb, 'internetquelle', 'titel|titelerg|zitat|werk|zugriff') and
       vorlage_param($bb, 'cite [a-z ]*', 'title') and
       vorlage_param($bb, 'weblink ohne linktext', 'hinweis') and
-      vorlage_param($bb, 'literatur', 'titel|titelerg|originaltitel|sammelwerk|werkerg') and
+      vorlage_param($bb, 'literatur', 'titel|titelerg|originaltitel|sammelwerk|werkerg|zitat') and
       vorlage_param($bb, '("|zitat)(-\w*)?', 'text|quelle') and
       vorlage_param($bb, 'inschrift', 'text|umschrift') and
       vorlage_param($bb, 'infobox fluss', 'pegel[0-9]|quellschüttung') and
