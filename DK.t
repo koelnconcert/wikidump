@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 267;
+use Test::More tests => 272;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -158,15 +158,22 @@ sub test_url {
 sub test_table {
   notfound("=2000-01-01");
   notfound("= ('2000-01-01')");
+
   notfound("|2000-01-01");
   notfound("|''2000-01-01");
   notfound("| ('2000-01-01')");
   notfound("2000-01-01|");
   notfound("2000-01-01') |");
-  notfound("!! 2000-01-01");
-  notfound("2000-01-01 !!");
   notfound("|<small>1.1.2000");
   notfound("1.1.2000</small>|");
+
+  notfound("!! 2000-01-01");
+  notfound("foo !! 2000-01-01");
+  notfound("\n! 2000-01-01");
+  found("foo ! 2000-01-01", "2000-01-01");
+  notfound("2000-01-01 !!");
+  notfound("2000-01-01 \n!");
+  found("2000-01-01 !", "2000-01-01");
 }
 
 sub test_ref {
