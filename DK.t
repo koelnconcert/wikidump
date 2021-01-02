@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 280;
+use Test::More tests => 282;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -356,6 +356,8 @@ sub test_special {
 
   notfound("Kultusministerium 25.02.2016 Drucksache 6/4829");
   notfound("Staatskanzlei und Ministerium für Kultur 08.03.2019 Drucksache 7/4067");
+  notfound("Gebietsänderungen vom 01. Januar bis 31. Dezember 2010");
+  found("01. Januar bis 31. Dezember 2010", "01. Januar");
 }
 
 sub test_other {
