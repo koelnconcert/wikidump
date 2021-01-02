@@ -102,7 +102,7 @@ sub mod_datumsformat {
     my $ignore_chars = '\s\'\(\)\/0-9\-–;:.+†*';
     my $ignore_strings = '&nbsp;';
     my $ignore_tags = 'small|s';
-    my $ignore_before_param = 'https?:\/\/\S+';
+    my $ignore_before_param = 'https?:\/\/\S+|=';
 
     my $ignore = "([$ignore_chars]|$ignore_strings|</?($ignore_tags)[^>]*>)*";
 
