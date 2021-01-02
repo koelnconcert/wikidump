@@ -181,7 +181,7 @@ sub mod_datumsformat {
         # filtert "er-Zweig", "-rc1"," -12", aber nicht "-12.3.1999" oder ":00"
       d($b !~ /(version(snummer)?|kernel|linux|release|mac os|os x)(\]\])?[ :=\-]*$/i, "buzz") and
         # Buzz-Wort
-      d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|lemma|satz|theorem|system-nr\.|gruppe|tagesordnungspunkt)(\s|&nbsp;)*'*$/i, "systematik") and
+      d($b !~ /\W(kap(itel|\.)?|abs(atz|\.)?|abschnitte?|paragraph|§|definition|lemma|satz|theorem|nr\.|gruppe|tagesordnungspunkt|\w*nummer)(\s|&nbsp;|')*$/i, "systematik") and
         # Systematik
       d($b !~ /(CAS|DIN|EN|VDE|ISO|EC|ÖNORM|RVS|Euronorm)(&nbsp;)?.{0,9}$/, "norm") and
       d(($b !~ /Gemeinden 1994 und ihre Veränderungen seit $/ and $m.$a !~ /^01.01.1948 in den neuen Ländern/), "Spezialfall: Gemeinden 1994") and
