@@ -97,9 +97,14 @@ sub mod_datumsformat {
   sub check_param {
     # parameter oder Tabelle, auch geklammert, kursiv, fett oder <small>
     my ($a, $b) = @_;
+    my $ignore_chars = '\s\'\(\)\/0-9\-–;:.+†*';
+    my $ignore_tags = 'small|s';
+    my $ignore = "([$ignore_chars]|</?($ignore_tags)>)*";
+    my $begin_param = '([|=]|!!|\n!)';
+    my $end_param   = '([|}]|!!|\n!)';
     return (
-      d($b !~ /([|=]|!!|\n!)([\s'\(\/0-9\-–;:.+†*]|<(small|s)>)*$/s, "param1") and
-      d($a !~ /^([\s'\)\/0-9\-–;:.+†*]|<\/(small|s)>)*([|}]|!!|\n!)/s, "param2")
+      d($b !~ /$begin_param $ignore $/sx, "param1") and
+      d($a !~ /^ $ignore $end_param/sx, "param2")
     );
   }
 
