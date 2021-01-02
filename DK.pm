@@ -99,7 +99,7 @@ sub mod_datumsformat {
     my ($a, $b) = @_;
     my $ignore_chars = '\s\'\(\)\/0-9\-–;:.+†*';
     my $ignore_tags = 'small|s';
-    my $ignore = "([$ignore_chars]|</?($ignore_tags)>)*";
+    my $ignore = "([$ignore_chars]|</?($ignore_tags)>|&nbsp;)*";
     my $begin_param = '([|=]|!!|\n!)';
     my $end_param   = '([|}]|!!|\n!)';
     return (
