@@ -97,19 +97,22 @@ sub mod_datumsformat {
   sub check_param {
     # parameter oder Tabelle, auch geklammert, kursiv, fett oder <small>
     my ($a, $b) = @_;
+    my $begin_param = '[|=]|!!|\n!';
+    my $end_param   = '[|}]|!!|\n!';
     my $ignore_chars = '\s\'\(\)\/0-9\-–;:.+†*';
+    my $ignore_strings = '&nbsp;';
     my $ignore_tags = 'small|s';
-    my $ignore = "([$ignore_chars]|</?($ignore_tags)[^>]*>|&nbsp;)*";
-    my $begin_param = '([|=]|!!|\n!)';
-    my $end_param   = '([|}]|!!|\n!)';
+    my $ignore_before_param = 'https?:\/\/\S+';
 
-    my $match_begin_param = $b =~ /$begin_param $ignore $/sx;
-    my $match_before_delimiter = $` =~ /https?:\/\/\S+$/;
+    my $ignore = "([$ignore_chars]|$ignore_strings|</?($ignore_tags)[^>]*>)*";
 
-    my $match_end_param = $a =~ /^ $ignore $end_param/sx;
+    my $match_begin_param = $b =~ /($begin_param) $ignore $/sx;
+    my $match_before_param = $` =~ /($ignore_before_param)$/;
+
+    my $match_end_param = $a =~ /^ $ignore ($end_param)/sx;
 
     return (
-      d((!$match_begin_param or $match_before_delimiter), "param-begin") and
+      d((!$match_begin_param or $match_before_param), "param-begin") and
       d(!$match_end_param, "param-end")
     );
   }
