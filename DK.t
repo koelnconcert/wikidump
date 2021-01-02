@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 272;
+use Test::More tests => 276;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -166,6 +166,7 @@ sub test_table {
   notfound("2000-01-01') |");
   notfound("|<small>1.1.2000");
   notfound("1.1.2000</small>|");
+  notfound("|<s>So, 15.3.20</s>|");
 
   notfound("!! 2000-01-01");
   notfound("foo !! 2000-01-01");
@@ -174,6 +175,10 @@ sub test_table {
   notfound("2000-01-01 !!");
   notfound("2000-01-01 \n!");
   found("2000-01-01 !", "2000-01-01");
+
+  notfound("||foo 05.09.2001 – 19:00||");
+  notfound("||29 – 05.09.2001 bar||");
+  found("||foo 05.09.2001 bar||", "05.09.2001");
 }
 
 sub test_ref {
@@ -239,7 +244,7 @@ sub test_notalone {
 
 sub test_param_detection_styled {
   found('{{foobar|foo 1.1.2000 bar}}', '1.1.2000');
-  found('{{foobar|*1.1.2000*}}', '1.1.2000');
+  notfound('{{foobar|*1.1.2000*}}');
   notfound('{{foobar|1.1.2000}}');
   notfound("{{foobar|''1.1.2000''}}");
   notfound("{{foobar|'''1.1.2000'''}}");

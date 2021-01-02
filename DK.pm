@@ -146,9 +146,9 @@ sub mod_datumsformat {
       d($b !~ /\[\/\/\S*$/, "url-without-protocol") and # link
       d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
       ($no_check_param or (
-        d($b !~ /([|=]|!!|\n!)([\s'\(]|<small>)*$/s, "param1") and
+        d($b !~ /([|=]|!!|\n!)([\s'\(\/0-9\-–;:.+†*]|<(small|s)>)*$/s, "param1") and
          # parameter oder Tabelle, auch geklammert, kursiv, fett oder <small>
-        d($a !~ /^([\s'\)]|<\/small>)*([|}]|!!|\n!)/s, "param2") and
+        d($a !~ /^([\s'\)\/0-9\-–;:.+†*]|<\/(small|s)>)*([|}]|!!|\n!)/s, "param2") and
           # parameter oder Tabelle, auch geklammert, kursiv fett oder <small>
         1
       )) and
