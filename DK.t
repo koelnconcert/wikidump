@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 278;
+use Test::More tests => 279;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -182,6 +182,8 @@ sub test_table {
   found("||foo 05.09.2001 bar||", "05.09.2001");
 
   notfound("|  &nbsp; 16.03.97 &nbsp; |");
+
+  found("http://example.com?n=1 1.1.2020 foo", "1.1.2020");
 }
 
 sub test_ref {

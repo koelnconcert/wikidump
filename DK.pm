@@ -102,9 +102,15 @@ sub mod_datumsformat {
     my $ignore = "([$ignore_chars]|</?($ignore_tags)[^>]*>|&nbsp;)*";
     my $begin_param = '([|=]|!!|\n!)';
     my $end_param   = '([|}]|!!|\n!)';
+
+    my $match_begin_param = $b =~ /$begin_param $ignore $/sx;
+    my $match_before_delimiter = $` =~ /https?:\/\/\S+$/;
+
+    my $match_end_param = $a =~ /^ $ignore $end_param/sx;
+
     return (
-      d($b !~ /$begin_param $ignore $/sx, "param1") and
-      d($a !~ /^ $ignore $end_param/sx, "param2")
+      d((!$match_begin_param or $match_before_delimiter), "param-begin") and
+      d(!$match_end_param, "param-end")
     );
   }
 
