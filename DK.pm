@@ -94,6 +94,15 @@ sub mod_datumsformat {
     return 1;
   }
 
+  sub check_param {
+    # parameter oder Tabelle, auch geklammert, kursiv, fett oder <small>
+    my ($a, $b) = @_;
+    return (
+      d($b !~ /([|=]|!!|\n!)([\s'\(\/0-9\-–;:.+†*]|<(small|s)>)*$/s, "param1") and
+      d($a !~ /^([\s'\)\/0-9\-–;:.+†*]|<\/(small|s)>)*([|}]|!!|\n!)/s, "param2")
+    );
+  }
+
   sub vorlage {
     my ($b, $vorlage, $param) = @_;
     my $re = '\{\{('.$vorlage.')\|[^\}]*$';
@@ -145,13 +154,7 @@ sub mod_datumsformat {
       d($b !~ /https?:\/\/\S*$/, "http-url") and # link
       d($b !~ /\[\/\/\S*$/, "url-without-protocol") and # link
       d($a !~ /^\s*<!--/, "comment") and # Kommentar danach
-      ($no_check_param or (
-        d($b !~ /([|=]|!!|\n!)([\s'\(\/0-9\-–;:.+†*]|<(small|s)>)*$/s, "param1") and
-         # parameter oder Tabelle, auch geklammert, kursiv, fett oder <small>
-        d($a !~ /^([\s'\)\/0-9\-–;:.+†*]|<\/(small|s)>)*([|}]|!!|\n!)/s, "param2") and
-          # parameter oder Tabelle, auch geklammert, kursiv fett oder <small>
-        1
-      )) and
+      ($no_check_param or check_param($a, $b)) and
       d($b !~ /\[\[[^\]\|]+$/, "wikilink") and
       e($a !~ /^[^\[\]]*\][^\]]+/s, "http-label") and # vermutlich http-link
       e($a !~ /^[^<]*<\/ref>/s, "ref") and # ref-tags
