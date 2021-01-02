@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 277;
+use Test::More tests => 278;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -165,6 +165,7 @@ sub test_table {
   notfound("2000-01-01|");
   notfound("2000-01-01') |");
   notfound("|<small>1.1.2000");
+  notfound('|<small style="color:dimgray;">31.08.2019</small>');
   notfound("1.1.2000</small>|");
   notfound("|<s>So, 15.3.20</s>|");
 
