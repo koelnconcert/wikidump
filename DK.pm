@@ -215,6 +215,7 @@ sub mod_datumsformat {
       vorlage($bb, "DOI") and
       vorlage($bb, 'exzellent|lesenswert|informativ') and
       vorlage($bb, 'lückenhaft|belege fehlen|veraltet') and
+      vorlage($bb, "turnierplan.*") and
       1
     );
   }

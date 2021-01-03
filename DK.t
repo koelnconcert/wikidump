@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 287;
+use Test::More tests => 288;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -342,7 +342,8 @@ sub test_special_params {
   notfound('{{Veraltet|<Bezug>|wurde mit 31.3.2016 eingestellt.|seit=2016}}');
   notfound('{{Internetquelle|datum=05. Februar 2015|zugriff=03. April 2017}}');
   notfound('{{Literatur|Zitat=foo 1.1.2000 bar}}');
-  notfound('{{OneLegResult|6=Di 24.10.2006, 19:15}}')
+  notfound('{{OneLegResult|6=Di 24.10.2006, 19:15}}');
+  notfound('{{Turnierplan32 | RD1 = Runde 2 - 01.04.2018 <br />best of 11 legs');
 }
 
 sub test_special {
