@@ -99,12 +99,18 @@ sub mod_datumsformat {
     my ($a, $b) = @_;
     my $begin_param = '[|=]|!!|\n!';
     my $end_param   = '[|}]|!!|\n!';
-    my $ignore_chars = '\s\'\(\)\/0-9\-–;:.+†*';
-    my $ignore_strings = '&nbsp;';
-    my $ignore_tags = 'small|s';
+    my $ignore_chars = '\s\'\(\)\/0-9\-–;:.,+†*';
+    my $ignore_strings = '&nbsp;|Uhr';
+    my $ignore_tags = 'small|s|tt|kbd';
+    my $ignore_templates = 'SortKey|0';
     my $ignore_before_param = 'https?:\/\/\S+|=';
 
-    my $ignore = "([$ignore_chars]|$ignore_strings|</?($ignore_tags)[^>]*>)*";
+    my $ignore = "
+      ( [$ignore_chars]
+      | $ignore_strings
+      | </?($ignore_tags)[^>]*>
+      | \\{\\{($ignore_templates)(?=[\}\|])[^}]*\\}\\}
+      )*";
 
     my $match_begin_param = $b =~ /($begin_param) $ignore $/sx;
     my $match_before_param = $` =~ /($ignore_before_param)$/;
@@ -205,7 +211,6 @@ sub mod_datumsformat {
       vorlage_param($bb, 'onelegresult', '6') and
       vorlage_param_first_unnamed($bb, '("|zitat)(-\w*)?') and
       vorlage_param_first_unnamed($bb, 'inschrift') and
-      vorlage_param_first_unnamed($bb, 'sortkey') and
       vorlage_param_first_unnamed($bb, 'salzburger nachrichten') and
       vorlage_param_first_unnamed($bb, 'banz') and
       vorlage_param_first_unnamed($bb, 'wikisource') and
@@ -216,6 +221,7 @@ sub mod_datumsformat {
       vorlage($bb, 'exzellent|lesenswert|informativ') and
       vorlage($bb, 'lückenhaft|belege fehlen|veraltet') and
       vorlage($bb, "turnierplan.*") and
+      vorlage($bb, "datumzelle|sortkey") and
       1
     );
   }

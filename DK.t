@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 288;
+use Test::More tests => 295;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -159,6 +159,7 @@ sub test_table {
   notfound("=2000-01-01");
   notfound("= ('2000-01-01')");
 
+  found("| foo 2000-01-01 bar |", "2000-01-01");
   notfound("|2000-01-01");
   notfound("|''2000-01-01");
   notfound("| ('2000-01-01')");
@@ -168,6 +169,10 @@ sub test_table {
   notfound('|<small style="color:dimgray;">31.08.2019</small>');
   notfound("1.1.2000</small>|");
   notfound("|<s>So, 15.3.20</s>|");
+  notfound("| <kbd>17.06.2007– 19.08.2007</kbd> |");
+  notfound("|{{SortKey|2007-06-14}}14.07.2007");
+  notfound('|{{0}}24.06.1970');
+  found('|{{0AnotherTemplateStartingWith0}}24.06.1970', '24.06.1970');
 
   notfound("!! 2000-01-01");
   notfound("foo !! 2000-01-01");
@@ -182,6 +187,7 @@ sub test_table {
   found("||foo 05.09.2001 bar||", "05.09.2001");
 
   notfound("|  &nbsp; 16.03.97 &nbsp; |");
+  notfound("| ZDF: '''17.01.1982''', 19:30 Uhr |");
 
   found("http://example.com?n=1 1.1.2020 foo", "1.1.2020");
   found("== Überschrift == \n 1.1.90", "1.1.90");
@@ -344,6 +350,7 @@ sub test_special_params {
   notfound('{{Literatur|Zitat=foo 1.1.2000 bar}}');
   notfound('{{OneLegResult|6=Di 24.10.2006, 19:15}}');
   notfound('{{Turnierplan32 | RD1 = Runde 2 - 01.04.2018 <br />best of 11 legs');
+  notfound('{{DatumZelle|09. Juli 1946}}');
 }
 
 sub test_special {
