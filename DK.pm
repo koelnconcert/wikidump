@@ -219,7 +219,7 @@ sub mod_datumsformat {
       vorlage($bb, "PND") and
       vorlage($bb, "DOI") and
       vorlage($bb, 'exzellent|lesenswert|informativ') and
-      vorlage($bb, 'lückenhaft|belege fehlen|veraltet') and
+      vorlage($bb, 'lückenhaft|belege|belege fehlen|veraltet') and
       vorlage($bb, "turnierplan.*") and
       vorlage($bb, "datumzelle|sortkey") and
       1
