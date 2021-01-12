@@ -50,6 +50,8 @@ sub mod_datumsformat {
   my($page, $mod) = (@_, "dk");
   return unless $page->namespace eq ''; # nur Artikel-Namensrausm
 
+  return if $page->title =~ /^Liste der Stolpersteine/;
+
   $_ = ${$page->text};
 
   s/<!--.*?-->/<!-- -->/sg; # Kommentare leeren
