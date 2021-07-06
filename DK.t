@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use utf8;
-use Test::More tests => 296;
+use Test::More tests => 297;
 use DK;
 use MockWikiPage;
 use Data::Dumper;
@@ -332,6 +332,7 @@ sub test_special_params {
   notfound("{{doi|10.5072/foo/01.01.2000}}");
   notfound("{{Infobox Burg |Bild = Foo 2013-01-21 42.JPG}}");
   notfound('data-sort-value="1966-01-15"');
+  notfound('data-sort-value="nachgerückt 2020-01-01"');
   notfound('{{foo|datei=foo 2000-01-01 bar}}');
   notfound('{{Infobox Software|AktuelleVersion=foo 1.1.2000 bar
                               |AktuelleVorabVersion= bar 2.2.2002 bar}}');

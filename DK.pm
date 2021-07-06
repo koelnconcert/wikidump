@@ -196,7 +196,7 @@ sub mod_datumsformat {
       d(($b !~ /Gebietsänderungen vom $/ and $m.$a !~ /^01. Januar bis 31. Dezember/), "Spezialfall: Gebietsänderungen") and
       d(($b !~ /Kultusministerium $/ and $m.$a !~ /^25.02.2016 Drucksache 6\/4829/), "Spezialfall: Denkmalverzeichnis Sachsen-Anhalt I") and
       d(($b !~ /Staatskanzlei und Ministerium für Kultur $/ and $m.$a !~ /^08.03.2019 Drucksache 7\/4067/), "Spezialfall: Denkmalverzeichnis Sachsen-Anhalt II") and
-      d($b !~ /data-sort-value *= *["']$/, "data-sort-value") and
+      d($b !~ /data-sort-value *= *["'][^"']*$/, "data-sort-value") and
       vorlage_param($bb, '[a-z ]*', 'bild|datei|doi|zitat') and
       vorlage_param($bb, 'internetquelle', 'titel|titelerg|werk|zugriff|datum') and
       vorlage_param($bb, 'cite [a-z ]*', 'title') and
